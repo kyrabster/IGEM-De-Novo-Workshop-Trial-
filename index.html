@@ -174,6 +174,21 @@ main{min-width:0;display:flex;flex-direction:column;gap:28px}
 .sci .flask{width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--ground);display:grid;place-items:center;font-size:11px;font-family:var(--mono);font-weight:700;flex:none}
 .next-btn{align-self:flex-start}
 
+/* ---------- transition / intermission cards ---------- */
+.interlude{background:linear-gradient(150deg,color-mix(in oklab,var(--acc-soft) 70%,var(--surface)) 0%,var(--surface) 55%);border:1px solid var(--line);position:relative;overflow:hidden}
+.interlude::before{content:"";position:absolute;inset:auto -40px -60px auto;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,color-mix(in oklab,var(--acc) 14%,transparent),transparent 65%);pointer-events:none}
+.interlude .step-no{color:var(--acc)}
+.il-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.il-card{background:color-mix(in oklab,var(--surface) 88%,transparent);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:8px}
+.il-card .t{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.il-card ul{margin:0;padding-left:18px;display:grid;gap:5px;font-size:15px;color:var(--ink-2)}
+.il-card ul b{color:var(--ink)}
+.il-quote{background:var(--ink);color:var(--ground);border-radius:16px;padding:18px 22px;font-family:var(--display);font-size:clamp(18px,2.1vw,23px);font-weight:700;line-height:1.35;letter-spacing:-.005em}
+.il-quote em{font-style:normal;color:var(--acc-soft)}
+.il-next{display:flex;gap:12px;align-items:center;flex-wrap:wrap;font-size:15px;color:var(--ink-2)}
+.il-next b{color:var(--ink)}
+.il-badge{background:var(--surface);border:1.5px solid var(--acc);color:var(--acc);border-radius:999px;padding:3px 11px;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
 /* ---------- protein viewer ---------- */
 .viewer{position:relative;background:radial-gradient(circle at 50% 42%,color-mix(in oklab,var(--surface) 92%,var(--acc-soft)),var(--ground));border:1px solid var(--line);border-radius:18px;overflow:hidden}
 .viewer canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
@@ -221,7 +236,7 @@ main{min-width:0;display:flex;flex-direction:column;gap:28px}
 .fr-row.drop{border-color:var(--hot);opacity:.35}
 .fr-row .rstate.ok{color:var(--ok)} .fr-row .rstate.no{color:var(--hot)}
 .mbar{flex:1;height:10px;border-radius:999px;background:var(--surface-2);overflow:hidden;min-width:40px}
-.mbar i{display:block;height:100%;border-radius:999px}
+.mbar i{display:block;height:100%;border-radius:999px;background:var(--chain)}
 .fr-row .go{display:flex;gap:6px;justify-content:flex-end}
 .fr-row button{font-size:12px;padding:5px 10px;border-radius:8px}
 
@@ -245,41 +260,60 @@ main{min-width:0;display:flex;flex-direction:column;gap:28px}
 .gauge .mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
 
 /* ---------- codon ---------- */
-.codon-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-block:10px}
+.codon-table{border-collapse:collapse;font-family:var(--mono);font-size:13px;width:100%}
+.codon-table th,.codon-table td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+.codon-table th{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);font-weight:700}
+.codon-table td:nth-child(2){font-weight:700}
+.codon-table td:nth-child(3){color:var(--ink-2);text-align:right}
+.codon-table tr.pref td:nth-child(2){color:var(--ok)}
+.codon-row{display:grid;grid-template-columns:60px 1fr;gap:14px;align-items:center;border-bottom:1px solid var(--line);padding-block:12px}
 .codon-row:last-child{border-bottom:0}
-.aa-badge{width:46px;height:46px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;font-family:var(--mono);font-size:19px;font-weight:700}
-.codon-opts{display:flex;gap:8px;flex-wrap:wrap}
-.codon{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;transition:border-color .2s,background .2s}
+.aa-badge{width:52px;height:52px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;font-family:var(--mono);font-size:20px;font-weight:700}
+.codon-opts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.codon{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;transition:border-color .2s,background .2s;display:inline-flex;align-items:center;gap:8px}
 .codon:hover{border-color:var(--acc)}
+.codon .pct{font-size:12px;color:var(--ink-2);font-weight:700}
 .codon.ok{border-color:var(--ok);background:var(--ok-soft)}
 .codon.no{border-color:var(--hot);background:var(--hot-soft)}
 .gene{font-family:var(--mono);font-size:13.5px;letter-spacing:.1em;line-height:2;word-break:break-all;background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:14px}
 .gene b{color:var(--acc)}
 
-/* ---------- certificate ---------- */
-.labcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:0;overflow:hidden;box-shadow:var(--shadow)}
-.lc-head{background:var(--ink);color:var(--ground);padding:24px clamp(18px,3vw,34px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:end}
-.lc-head h2{font-size:clamp(26px,3.2vw,38px);font-weight:800}
-.lc-head .eyebrow{color:var(--acc-soft)}
-.lc-body{padding:22px clamp(18px,3vw,34px) 28px;display:grid;gap:18px}
-.lc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.lc-field{border-top:2px solid var(--ink);padding-top:8px;display:grid;gap:2px}
-.lc-field .v{font-family:var(--display);font-size:24px;font-weight:700}
-.lc-list{margin:0;padding-left:20px;display:grid;gap:4px}
-.quiz{display:grid;gap:14px}
-.quiz .q{display:grid;gap:8px}
-.quiz .q p{font-weight:700}
+/* ---------- final summary ---------- */
+.summary-card{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:0;overflow:hidden;box-shadow:var(--shadow)}
+.sum-head{background:var(--ink);color:var(--ground);padding:26px clamp(18px,3vw,34px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:end}
+.sum-head h2{font-size:clamp(26px,3.2vw,38px);font-weight:800}
+.sum-head .eyebrow{color:var(--acc-soft)}
+.sum-body{padding:22px clamp(18px,3vw,34px) 28px;display:grid;gap:18px}
+.sum-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.sum-field{border-top:2px solid var(--ink);padding-top:8px;display:grid;gap:2px}
+.sum-field .v{font-family:var(--display);font-size:24px;font-weight:700}
+.sum-list{margin:0;padding-left:20px;display:grid;gap:6px}
+.sum-seq{font-family:var(--mono);font-size:16px;letter-spacing:.22em}
+.sum-gene{font-family:var(--mono);font-size:12.5px;line-height:1.9;word-break:break-all}
+
+/* ---------- quiz ---------- */
+.quiz{display:grid;gap:20px}
+.quiz .q{display:grid;gap:10px;border:1px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--surface)}
+.quiz .q>p{font-weight:700;font-size:17px}
+.opt{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 14px;text-align:left;display:grid;gap:6px;transition:border-color .2s,background .2s}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt .hd{font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.opt .tag{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.opt .ex{font-size:14px;color:var(--ink-2);line-height:1.45}
+.opt.good{border-color:var(--ok);background:var(--ok-soft)}
+.opt.meh{border-color:var(--warn);background:var(--warn-soft)}
+.opt:disabled{cursor:default}
 
 /* ---------- notebook ---------- */
-.notebook{position:sticky;top:calc(var(--hdr) + 24px);align-self:start;max-height:calc(100vh - var(--hdr) - 48px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:16px;box-shadow:var(--shadow);background-image:repeating-linear-gradient(transparent 0 27px,color-mix(in oklab,var(--line) 55%,transparent) 27px 28px)}
+.notebook{position:sticky;top:calc(var(--hdr) + 24px);align-self:start;max-height:calc(100vh - var(--hdr) - 48px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:16px;box-shadow:var(--shadow)}
 .nb-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .nb-head h3{font-size:19px;font-weight:800}
 .nb-count{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink-2)}
 .nb-sec{display:grid;gap:6px}
 .nb-sec ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
-.nb-sec li{font-size:14px;line-height:1.4;background:var(--surface);padding:6px 8px;border-radius:8px;border:1px solid var(--line)}
+.nb-sec li{font-size:14px;line-height:1.4;background:var(--ground);padding:7px 9px;border-radius:8px;border:1px solid var(--line)}
 .nb-sec li.fresh{animation:ink 1.2s}
-@keyframes ink{0%{background:var(--warn-soft);transform:translateX(8px)}100%{background:var(--surface)}}
+@keyframes ink{0%{background:var(--warn-soft);transform:translateX(8px)}100%{background:var(--ground)}}
 .nb-sec li.empty{border-style:dashed;color:var(--ink-2);background:transparent;font-style:italic}
 .nb-val{display:flex;justify-content:space-between;gap:8px}
 .nb-val b{font-family:var(--mono)}
@@ -346,7 +380,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   .brand{flex:1;min-width:0;font-size:15px}
   .stage-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
   .split,.split.wide{grid-template-columns:minmax(0,1fr)}
-  .lc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sum-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .il-grid{grid-template-columns:minmax(0,1fr)}
   .fr-row{grid-template-columns:70px minmax(0,1fr);grid-template-areas:"id seq" "metric metric" "state state";gap:6px 10px}
   .fr-row .rid{grid-area:id}.fr-row .rseq{grid-area:seq}.fr-row .rmetric{grid-area:metric}.fr-row .go{grid-area:state}
   .step-head{grid-template-columns:1fr}
@@ -360,8 +395,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 @media print{
   .hdr,.shell>aside,.toast,dialog,.confetti,.nb-toggle{display:none!important}
   body{background:#fff}
-  main>section:not(#step-10){display:none!important}
-  #step-10{border:0;box-shadow:none}
+  main>section:not(#step-14){display:none!important}
+  #step-14{border:0;box-shadow:none}
   .step-foot,.lock-veil{display:none!important}
 }
 </style>
@@ -392,21 +427,21 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 <section class="mission" id="mission" data-step="0">
   <div class="m-top">
     <span class="eyebrow">HKU iGEM · De novo design studio</span>
-    <h1 class="m-title">Design a protein that <em>switches off</em> inflammation.</h1>
-    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a receptor called <b>MD2</b>. If we can build a small protein that grabs MD2 and covers the right spot, the alarm never fires — and the wound gets a chance to heal.</p>
-    <p class="m-lede">No protein exists that does this. So we will <b>invent one</b>: pick the target surface, let generative AI sculpt a backbone, then push it through a four-stage filter until only the best candidate survives.</p>
+    <h1 class="m-title">Design a <em>better</em> protein to switch off inflammation.</h1>
+    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a receptor called <b>MD2</b>.</p>
+    <p class="m-lede">A peptide called <b>TAP2</b> already blocks MD2 and helps wounds heal — but it is short-lived, moderately strong, and can provoke an immune response. Our job is not to invent from nothing: it is to <b>design a better TAP2</b> using generative AI, then run it through the same filters a real drug candidate faces.</p>
     <div class="m-meta">
-      <span><b>11 stages</b> · about 45 minutes</span>
+      <span><b>15 stages</b> · about 50 minutes</span>
       <span><b>No coding</b> needed</span>
       <span>Progress saves in this browser</span>
     </div>
   </div>
 
   <div class="stage-strip">
-    <div class="stage-card s1"><span class="n">Stage 1 · Generate</span><h4>Target &amp; backbone</h4><p>Lock the hotspots, then let RFdiffusion and ProteinMPNN propose 10 sequences.</p></div>
+    <div class="stage-card s1"><span class="n">Stage 1 · Generate</span><h4>Target &amp; backbone</h4><p>Lock the hotspots, then let RFdiffusion and ProteinMPNN propose 10 new binders.</p></div>
     <div class="stage-card s2"><span class="n">Stage 2 · Filter</span><h4>The funnel</h4><p>Four checks — fold, grip, safety, immune — narrow 10 candidates down to 2.</p></div>
     <div class="stage-card s3"><span class="n">Stage 3 · Test</span><h4>Physics &amp; evolution</h4><p>Simulate body temperature, then mutate to strengthen the grip.</p></div>
-    <div class="stage-card s4"><span class="n">Stage 4 · Build</span><h4>DNA &amp; certification</h4><p>Turn the protein back into DNA and clear the safety check.</p></div>
+    <div class="stage-card s4"><span class="n">Stage 4 · Build</span><h4>DNA &amp; safety</h4><p>Turn the protein back into a gene and clear the biosafety check.</p></div>
   </div>
 
   <div class="hero-wrap">
@@ -518,13 +553,59 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>They all fit the hotspot. They do <i>not</i> all fold, grip, or stay quiet inside a human body. That is what the funnel is for.</p>
       <span class="sci"><span class="flask">Sc</span>A short chain like this is a <b>peptide</b>; AI-designed binders are often called <b>de novo binders</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="3" hidden>Next: filter by fold quality ↓</button>
+    <button class="btn acc next-btn" data-next="3" hidden>Continue ↓</button>
+  </div>
+</section>
+
+<!-- ============ INTERLUDE · Stage 1 done ============ -->
+<section class="step interlude locked" id="step-3" data-step="3">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish Stage 1.2 to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 1 · Complete <span class="t">· checkpoint</span> <span class="step-done-pill">Read</span></span>
+    <h2>The brief is set. Now the funnel begins.</h2>
+    <p class="lede">You have done the creative half of the job. The AI handed you 10 designs that all <i>look</i> plausible. From here on, everything you do is subtraction.</p>
+  </header>
+  <div class="step-body">
+    <div class="il-grid">
+      <div class="il-card">
+        <span class="t">What you just did</span>
+        <ul>
+          <li>Picked the <b>epitope</b> — A82 &amp; A85 on MD2</li>
+          <li>Ran <b>RFdiffusion</b> to invent a backbone</li>
+          <li>Ran <b>ProteinMPNN</b> to assign amino acids</li>
+          <li>Collected <b>10 candidate binders</b></li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What you learned</span>
+        <ul>
+          <li>AI is good at <b>proposing</b>, not at <b>judging</b></li>
+          <li>Fitting the hotspot ≠ folding stably</li>
+          <li>Folding stably ≠ gripping tightly</li>
+          <li>Every candidate is a hypothesis, not an answer</li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What's next</span>
+        <ul>
+          <li>Four filters, run in order of cost</li>
+          <li>Each asks a <b>different question</b></li>
+          <li>Fail any one and you're out</li>
+          <li>10 candidates go in — how many come out?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="il-quote">A design that fails one filter is unusable, <em>however good the others are</em>.</div>
+    <div class="il-next"><span class="il-badge">Stage 2 · Filter</span> <span><b>Fold quality</b> → grip → safety → immune → <b>2 survivors</b></span></div>
+  </div>
+  <div class="step-foot">
+    <button class="btn acc next-btn" data-next="4" hidden>Start the funnel ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 2.1 ============ -->
-<section class="step locked" id="step-3" data-step="3">
-  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Generate candidates to unlock</span>
+<section class="step locked" id="step-4" data-step="4">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Read the checkpoint to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 2.1 <span class="t">· fold quality (pLDDT) · 5 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Throw away anything that won't fold</h2>
@@ -544,12 +625,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>Confidence is not the same as quality — but a design nobody can fold has no chance at all, and it is the cheapest thing to check first.</p>
       <span class="sci"><span class="flask">Sc</span>Filtering cheapest-first is a <b>funnel</b>; each stage is a <b>selection criterion</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="4" hidden>Next: does it actually grip? ↓</button>
+    <button class="btn acc next-btn" data-next="5" hidden>Next: does it actually grip? ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 2.2 ============ -->
-<section class="step locked" id="step-4" data-step="4">
+<section class="step locked" id="step-5" data-step="5">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the fold check to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 2.2 <span class="t">· docking confidence (ipTM) · 5 min</span> <span class="step-done-pill">Done</span></span>
@@ -570,12 +651,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>A binder that folds but doesn't hold on is just a floating peptide. It would drift away before it could block anything.</p>
       <span class="sci"><span class="flask">Sc</span>When two molecules stick together they <b>co-fold</b>; the shape they make is a <b>complex</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="5" hidden>Next: is it safe? ↓</button>
+    <button class="btn acc next-btn" data-next="6" hidden>Next: is it safe? ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 2.3 ============ -->
-<section class="step locked" id="step-5" data-step="5">
+<section class="step locked" id="step-6" data-step="6">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the docking check to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 2.3 <span class="t">· off-target safety (MMseqs2) · 5 min</span> <span class="step-done-pill">Done</span></span>
@@ -596,12 +677,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>This check costs almost nothing and runs in seconds. So it happens early — before anyone spends money on a real experiment.</p>
       <span class="sci"><span class="flask">Sc</span>Accidental resemblance is <b>sequence homology</b>; avoiding it is <b>specificity</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="6" hidden>Next: will the body attack it? ↓</button>
+    <button class="btn acc next-btn" data-next="7" hidden>Next: will the body attack it? ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 2.4 ============ -->
-<section class="step locked" id="step-6" data-step="6">
+<section class="step locked" id="step-7" data-step="7">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the safety check to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 2.4 <span class="t">· immunogenicity (MHCflurry) · 5 min</span> <span class="step-done-pill">Done</span></span>
@@ -622,13 +703,59 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>Same 10 designs, four very different questions. Each one removes a way the design could fail in a real patient.</p>
       <span class="sci"><span class="flask">Sc</span>A sequence that provokes an immune response is <b>immunogenic</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="7" hidden>Next: test at body temperature ↓</button>
+    <button class="btn acc next-btn" data-next="8" hidden>Continue ↓</button>
+  </div>
+</section>
+
+<!-- ============ INTERLUDE · Stage 2 done ============ -->
+<section class="step interlude locked" id="step-8" data-step="8">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish Stage 2.4 to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 2 · Complete <span class="t">· checkpoint</span> <span class="step-done-pill">Read</span></span>
+    <h2>Ten candidates in, two out.</h2>
+    <p class="lede">You have done what a real discovery pipeline does in weeks of compute and months of grant paperwork — in about twenty minutes.</p>
+  </header>
+  <div class="step-body">
+    <div class="il-grid">
+      <div class="il-card">
+        <span class="t">What you just did</span>
+        <ul>
+          <li>Removed designs that <b>won't fold</b> (pLDDT &lt; 70)</li>
+          <li>Removed designs that <b>won't grip</b> (ipTM &lt; 0.60)</li>
+          <li>Removed designs that match <b>human proteins</b></li>
+          <li>Removed designs the <b>immune system</b> would flag</li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What you learned</span>
+        <ul>
+          <li>Each filter answers a <b>different</b> question</li>
+          <li>Passing one says nothing about the next</li>
+          <li>Cheap checks run before expensive ones</li>
+          <li>Two survivors out of ten is a <b>normal</b> success rate</li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What's next</span>
+        <ul>
+          <li>Both survivors <b>passed every filter</b></li>
+          <li>But none of those filters simulated <b>motion</b></li>
+          <li>Body temperature changes everything</li>
+          <li>Time to run the physics</li>
+        </ul>
+      </div>
+    </div>
+    <div class="il-quote">A structure is a photograph. <em>A simulation is a movie.</em> Only the movie shows you what falls apart.</div>
+    <div class="il-next"><span class="il-badge">Stage 3 · Physics</span> <span><b>37 °C water box</b> → <b>point mutations</b> → one winning candidate</span></div>
+  </div>
+  <div class="step-foot">
+    <button class="btn acc next-btn" data-next="9" hidden>Start the physics ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 3.1 ============ -->
-<section class="step locked" id="step-7" data-step="7">
-  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the immune filter to unlock</span>
+<section class="step locked" id="step-9" data-step="9">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Read the checkpoint to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 3.1 <span class="t">· 37 °C water box simulation · 10 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Does it survive a real body?</h2>
@@ -666,12 +793,12 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>Both passed four computational filters. Neither of those filters simulated motion. A structure is a photograph; a simulation is a movie.</p>
       <span class="sci"><span class="flask">Sc</span>Shaking a molecule with physics for a while is <b>molecular dynamics</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="8" hidden>Next: evolve it ↓</button>
+    <button class="btn acc next-btn" data-next="10" hidden>Next: evolve it ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 3.2 ============ -->
-<section class="step locked" id="step-8" data-step="8">
+<section class="step locked" id="step-10" data-step="10">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the MD simulation to unlock</span>
   <header class="step-head">
     <span class="step-no">Stage 3.2 <span class="t">· in silico point evolution · 10 min</span> <span class="step-done-pill">Done</span></span>
@@ -711,17 +838,63 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <p>Every mutation we tried was tested by a model, not a pipette. A wet lab would take weeks to test this many variants — the model narrows thousands of options down to a handful worth testing for real.</p>
       <span class="sci"><span class="flask">Sc</span>Searching a space by balancing exploration and exploitation is <b>Bayesian optimisation</b></span>
     </div>
-    <button class="btn acc next-btn" data-next="9" hidden>Next: turn it into DNA ↓</button>
+    <button class="btn acc next-btn" data-next="11" hidden>Continue ↓</button>
+  </div>
+</section>
+
+<!-- ============ INTERLUDE · Stage 3 done ============ -->
+<section class="step interlude locked" id="step-11" data-step="11">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish Stage 3.2 to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 3 · Complete <span class="t">· checkpoint</span> <span class="step-done-pill">Read</span></span>
+    <h2>One winner, tested in physics.</h2>
+    <p class="lede">The scores said two candidates were equal. The simulation said they were not. That is the whole value of this stage.</p>
+  </header>
+  <div class="step-body">
+    <div class="il-grid">
+      <div class="il-card">
+        <span class="t">What you just did</span>
+        <ul>
+          <li>Simulated <b>20 ns</b> of real physics at 37 °C</li>
+          <li>Dropped the candidate whose <b>RMSD climbed</b></li>
+          <li>Improved binding energy by <b>mutating residues</b></li>
+          <li>Kept the <b>contact residues</b> untouched</li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What you learned</span>
+        <ul>
+          <li>Scores and simulations measure <b>different things</b></li>
+          <li>Even strong binders can shake apart</li>
+          <li>Not every position is safe to mutate</li>
+          <li>UCB searches efficiently — no brute force</li>
+        </ul>
+      </div>
+      <div class="il-card">
+        <span class="t">What's next</span>
+        <ul>
+          <li>We have a <b>protein sequence</b></li>
+          <li>But we can't order <i>protein</i> — we order <b>DNA</b></li>
+          <li>Same molecule, many possible genes</li>
+          <li>Which codons will <i>E. coli</i> read fastest?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="il-quote">A design that only exists as a score is not a design. <em>Eventually you have to write the gene.</em></div>
+    <div class="il-next"><span class="il-badge">Stage 4 · Build</span> <span><b>Reverse translation</b> → <b>biosafety quiz</b> → your final candidate</span></div>
+  </div>
+  <div class="step-foot">
+    <button class="btn acc next-btn" data-next="12" hidden>Write the gene ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 4.1 ============ -->
-<section class="step locked" id="step-9" data-step="9">
-  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the evolution stage to unlock</span>
+<section class="step locked" id="step-12" data-step="12">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Read the checkpoint to unlock</span>
   <header class="step-head">
-    <span class="step-no">Stage 4.1 <span class="t">· code-to-DNA reverse translation · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <span class="step-no">Stage 4.1 <span class="t">· reverse translation · 5 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Write the gene</h2>
-    <p class="lede">Proteins are built from DNA, three letters at a time. Most amino acids have several possible triplets — but <i>E. coli</i> reads some of them much faster than others. For each residue below, pick the triplet the cell prefers.</p>
+    <p class="lede">Proteins are built from DNA, three letters at a time. Most amino acids have several possible triplets — but <i>E. coli</i> reads some of them much faster than others. Below is a real <i>E. coli</i> codon usage table so you can decide for yourself.</p>
     <button class="ghost hint-btn" data-hint="9">Hint</button>
   </header>
   <div class="step-body">
@@ -729,11 +902,24 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
       <span class="label">Winning peptide</span>
       <div class="seq-strip" id="winSeq"></div>
     </div>
+
+    <div class="panel" style="display:grid;gap:10px">
+      <div class="row" style="justify-content:space-between;align-items:baseline">
+        <span class="label">Reference · E. coli K-12 codon usage</span>
+        <span class="kbd-hint">how often each triplet is used for that amino acid</span>
+      </div>
+      <p style="font-size:14.5px;color:var(--ink-2)">The genetic code is redundant: 64 triplets spell only 20 amino acids. Highly expressed genes in <i>E. coli</i> use the <b>green</b> codons almost exclusively, because there is far more tRNA for them — the ribosome never has to pause and wait.</p>
+      <div style="overflow-x:auto">
+        <table class="codon-table" id="codonTable"></table>
+      </div>
+    </div>
+
     <div class="panel" style="display:grid;gap:0">
-      <span class="label" style="margin-bottom:6px">Reverse translate</span>
+      <span class="label" style="margin-bottom:6px">Now pick one codon per position — always choose the one E. coli prefers most</span>
       <div id="codonRows"></div>
     </div>
     <div id="codonSay" aria-live="polite"></div>
+
     <div id="geneWrap" hidden style="display:grid;gap:10px">
       <span class="label">Full gene · 5′ → 3′</span>
       <div class="gene" id="geneOut"></div>
@@ -747,19 +933,19 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     <div class="discover" id="codondisc" hidden>
       <span class="k">Same protein, many possible genes</span>
       <div class="rule"><span class="tile m">4³ = 64</span><span class="tile o">codons for</span><span class="tile m">20</span><span class="tile o">amino acids</span></div>
-      <p>The genetic code is redundant: 64 three-letter words spell only 20 amino acids. That redundancy is free room for optimisation — same medicine, easier to manufacture.</p>
+      <p>Redundancy is free room for optimisation. Same medicine, easier to manufacture — at no extra cost and with no change to the final protein.</p>
     </div>
-    <button class="btn acc next-btn" data-next="10" hidden>Next: safety check &amp; certificate ↓</button>
+    <button class="btn acc next-btn" data-next="13" hidden>Next: safety check ↓</button>
   </div>
 </section>
 
 <!-- ============ STAGE 4.2 ============ -->
-<section class="step locked" id="step-10" data-step="10">
+<section class="step locked" id="step-13" data-step="13">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Build the gene to unlock</span>
   <header class="step-head">
-    <span class="step-no">Stage 4.2 <span class="t">· lab compliance &amp; certification · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <span class="step-no">Stage 4.2 <span class="t">· lab compliance · 5 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Clear the safety check</h2>
-    <p class="lede">Before any DNA is ordered, three questions. Get all three and your certificate unlocks.</p>
+    <p class="lede">Before any DNA is ordered, three questions. Read the explanation under each option before you choose — some of them sound reasonable but protect the wrong thing.</p>
     <button class="ghost hint-btn" data-hint="10">Hint</button>
   </header>
   <div class="step-body">
@@ -767,54 +953,81 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
     <div id="quizSay" aria-live="polite"></div>
   </div>
   <div class="step-foot">
-    <button class="btn acc next-btn" data-next="11" hidden>See your certificate ↓</button>
+    <button class="btn acc next-btn" data-next="14" hidden>See what you built ↓</button>
   </div>
 </section>
 
-<!-- ============ CERTIFICATE ============ -->
-<section class="labcard step locked" id="step-11" data-step="11" style="padding:0">
+<!-- ============ FINAL SUMMARY (replaces certificate) ============ -->
+<section class="summary-card step locked" id="step-14" data-step="14" style="padding:0">
   <span class="lock-veil"><svg><use href="#i-lock"/></svg>Pass the safety quiz to unlock</span>
-  <div class="lc-head">
+  <div class="sum-head">
     <div style="display:grid;gap:6px">
-      <span class="eyebrow">De Novo Bio-Design Studio · Certificate of Completion</span>
-      <h2>AI Bio-Engineer</h2>
+      <span class="eyebrow">De Novo Bio-Design Studio · what you actually built</span>
+      <h2>Your candidate, from scratch to gene</h2>
     </div>
-    <button class="ghost" id="certPrint" style="background:transparent;color:var(--ground);border-color:color-mix(in oklab,var(--ground) 40%,transparent)">Print / save PDF</button>
   </div>
-  <div class="lc-body step-body">
-    <div class="row" style="gap:12px;align-items:flex-end">
-      <label style="display:grid;gap:4px"><span class="label">Your name</span>
-        <input id="certName" placeholder="Type your name" style="border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--ground);font-weight:700;min-width:230px">
-      </label>
-      <span class="kbd-hint" id="certDate"></span>
+  <div class="sum-body step-body">
+    <div class="sum-grid">
+      <div class="sum-field"><span class="label">Candidate</span><span class="v num" id="lcId">—</span></div>
+      <div class="sum-field"><span class="label">Fold confidence · pLDDT</span><span class="v num" id="lcPlddt">—</span></div>
+      <div class="sum-field"><span class="label">Interface confidence · ipTM</span><span class="v num" id="lcIptm">—</span></div>
+      <div class="sum-field"><span class="label">Binding energy · ΔG</span><span class="v num" id="lcDg">—</span></div>
     </div>
-    <div class="lc-grid">
-      <div class="lc-field"><span class="label">Candidate</span><span class="v num" id="lcId">—</span></div>
-      <div class="lc-field"><span class="label">Fold confidence · pLDDT</span><span class="v num" id="lcPlddt">—</span></div>
-      <div class="lc-field"><span class="label">Interface confidence · ipTM</span><span class="v num" id="lcIptm">—</span></div>
-      <div class="lc-field"><span class="label">Binding energy · ΔG</span><span class="v num" id="lcDg">—</span></div>
-    </div>
-    <div class="rv" style="display:grid;gap:6px">
+
+    <div style="display:grid;gap:6px">
       <span class="label">Designed peptide sequence</span>
-      <div class="gene" style="font-size:16px;letter-spacing:.22em" id="lcSeq">—</div>
+      <div class="sum-seq" id="lcSeq">—</div>
     </div>
-    <div class="rv" style="display:grid;gap:6px">
-      <span class="label">Synthesised gene</span>
-      <div class="gene" style="font-size:12.5px;line-height:1.9" id="lcGene">—</div>
+
+    <div style="display:grid;gap:6px">
+      <span class="label">Synthesised gene · 5′ → 3′</span>
+      <div class="sum-gene" id="lcGene">—</div>
     </div>
-    <div class="rv"><p class="label">What we learned</p>
-      <ul class="lc-list" id="lcRules" style="margin-top:8px"></ul>
+
+    <div class="il-grid" style="margin-top:6px">
+      <div class="il-card" style="background:var(--surface-2);border-color:var(--line)">
+        <span class="t">Stage 1 · Generate</span>
+        <ul>
+          <li><b>AI proposes</b> — it doesn't judge</li>
+          <li>Fitting the hotspot ≠ folding stably</li>
+          <li>Every candidate is a hypothesis</li>
+        </ul>
+      </div>
+      <div class="il-card" style="background:var(--surface-2);border-color:var(--line)">
+        <span class="t">Stage 2 · Filter</span>
+        <ul>
+          <li>Four <b>different</b> questions in a row</li>
+          <li>Cheap checks before expensive ones</li>
+          <li>10 → 2 is a healthy success rate</li>
+        </ul>
+      </div>
+      <div class="il-card" style="background:var(--surface-2);border-color:var(--line)">
+        <span class="t">Stage 3 · Physics</span>
+        <ul>
+          <li>Scores are snapshots, <b>simulation is a movie</b></li>
+          <li>Protect contact residues, mutate the rest</li>
+          <li>Search a space intelligently — UCB &gt; brute force</li>
+        </ul>
+      </div>
+      <div class="il-card" style="background:var(--surface-2);border-color:var(--line)">
+        <span class="t">Stage 4 · Build</span>
+        <ul>
+          <li>Same protein → <b>many possible genes</b></li>
+          <li>Match the host's codon preference</li>
+          <li>Check safety <b>before</b> ordering DNA</li>
+        </ul>
+      </div>
     </div>
-    <div class="rv panel"><p class="label">Next experiment</p>
-      <p style="margin-top:6px"><b>Order the top three designs</b>, not just the winner, and measure how tightly each one actually grips MD2 in the lab. Does the model's ranking hold up?</p>
-    </div>
+
+    <div class="il-quote" style="background:var(--acc);color:#fff">The real lesson is not that AI designs proteins. <em style="color:var(--acc-soft)">It is that a good design needs both a generator and a filter — and the filter is what keeps patients safe.</em></div>
+
     <div class="rv row"><button class="btn acc" id="openStudioBtn">Open Studio: change every threshold ↓</button></div>
   </div>
 </section>
 
 <!-- ============ OPEN STUDIO ============ -->
-<section class="step locked" id="step-12" data-step="12">
-  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Unlocks after the certificate</span>
+<section class="step locked" id="step-15" data-step="15">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Unlocks after the summary</span>
   <header class="step-head">
     <span class="step-no">Open Studio <span class="t">· bonus</span></span>
     <h2>What if our cut-offs were different?</h2>
@@ -869,7 +1082,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 const $  = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const STORE_KEY = "denovoStudio.v1";
+const STORE_KEY = "denovoStudio.v2";
 const HELPER_CODE = "2026";
 const wait = ms => new Promise(r => setTimeout(r, REDUCED ? Math.min(ms, 60) : ms));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -919,14 +1132,13 @@ new MutationObserver(readTokens).observe(document.documentElement, { attributes:
    2 · state
    ============================================================ */
 const blank = () => ({
-  v: 1, done: {}, decide: [], values: {}, badges: [],
-  data: {}
+  v: 2, done: {}, decide: [], values: {}, badges: [], data: {}
 });
 let S = blank();
 function load() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    if (raw) { const o = JSON.parse(raw); if (o && o.v === 1) S = Object.assign(blank(), o); }
+    if (raw) { const o = JSON.parse(raw); if (o && o.v === 2) S = Object.assign(blank(), o); }
   } catch (e) { /* ignore */ }
 }
 function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
@@ -996,7 +1208,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 /* ============================================================
-   5 · the MD2 receptor model (procedural β-cup)
+   5 · MD2 receptor model
    ============================================================ */
 function buildMD2() {
   const rand = mulberry32(8817);
@@ -1026,10 +1238,7 @@ function buildMD2() {
 }
 const MD2 = buildMD2();
 const resIndex = res => Math.round((res - 17) / (160 - 17) * (MD2.length - 1));
-const HOT = [
-  { res: 82, i: resIndex(82) },
-  { res: 85, i: resIndex(85) }
-];
+const HOT = [{ res: 82, i: resIndex(82) }, { res: 85, i: resIndex(85) }];
 
 function project3(p, rot, scale, cx, cy, focal) {
   const cyw = Math.cos(rot.yaw), syw = Math.sin(rot.yaw);
@@ -1054,7 +1263,6 @@ function renderProtein(ctx, w, h, o) {
   const fog = z => 1 - 0.6 * ((z - zmin) / span);
   const order = P.map((_, i) => i).sort((a, b) => P[b].z - P[a].z);
 
-  // backbone ribbon
   for (const i of order) {
     if (i + 1 >= P.length) continue;
     const a = P[i], b = P[i + 1];
@@ -1066,7 +1274,6 @@ function renderProtein(ctx, w, h, o) {
   }
   ctx.globalAlpha = 1;
 
-  // beads
   const rBase = (o.rBase ?? 1.75) * scale;
   for (const i of order) {
     const p = P[i];
@@ -1081,7 +1288,6 @@ function renderProtein(ctx, w, h, o) {
   }
   ctx.globalAlpha = 1;
 
-  // hotspots
   const hotPts = [];
   if (o.hot) {
     for (const hspot of o.hot) {
@@ -1114,8 +1320,6 @@ function renderProtein(ctx, w, h, o) {
   ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
   return { P, hotPts };
 }
-
-/* small helper: draw a bead */
 function bead(ctx, x, y, r, color, alpha = 1) {
   ctx.globalAlpha = alpha;
   ctx.fillStyle = color;
@@ -1142,13 +1346,13 @@ const CANDS = [
   { id: "MD2B-10", seq: "MTVQELLRELAGLKT", plddt: 94.1, iptm: 0.91, off: 0, mhc: 0, stable: true }
 ];
 const RULES = {
-  3: { label: "pLDDT", pass: c => c.plddt >= 70 },
-  4: { label: "ipTM",   pass: c => c.iptm >= 0.60 },
-  5: { label: "off-target", pass: c => c.off === 0 },
-  6: { label: "MHC",    pass: c => c.mhc === 0 }
+  4: { label: "pLDDT", pass: c => c.plddt >= 70 },
+  5: { label: "ipTM",   pass: c => c.iptm >= 0.60 },
+  6: { label: "off-target", pass: c => c.off === 0 },
+  7: { label: "MHC",    pass: c => c.mhc === 0 }
 };
 const survivorsAfter = upTo => CANDS.filter(c => {
-  for (let k = 3; k <= upTo; k++) if (!RULES[k].pass(c)) return false;
+  for (let k = 4; k <= upTo; k++) if (!RULES[k].pass(c)) return false;
   return true;
 });
 
@@ -1156,9 +1360,11 @@ const survivorsAfter = upTo => CANDS.filter(c => {
    7 · steps registry
    ============================================================ */
 const Steps = {};
-const LABELS = ["Go", "1.1", "1.2", "2.1", "2.2", "2.3", "2.4", "3.1", "3.2", "4.1", "4.2", "Cert", "Studio"];
-const NAMES = ["Mission", "Target setup", "Generation", "Fold quality", "Docking", "Off-target", "Immunogenicity",
-               "MD stability", "Evolution", "Reverse translation", "Certification", "Certificate", "Open Studio"];
+const LABELS = ["Go", "1.1", "1.2", "S1", "2.1", "2.2", "2.3", "2.4", "S2", "3.1", "3.2", "S3", "4.1", "4.2", "Sum", "Studio"];
+const NAMES = ["Mission", "Target setup", "Generation", "Stage 1 checkpoint",
+               "Fold quality", "Docking", "Off-target", "Immunogenicity",
+               "Stage 2 checkpoint", "MD stability", "Evolution", "Stage 3 checkpoint",
+               "Reverse translation", "Certification", "Summary", "Open Studio"];
 const section = n => document.querySelector(`[data-step="${n}"]`);
 const unlocked = n => n === 0 || !!S.done[n - 1];
 
@@ -1173,7 +1379,7 @@ function buildProgress() {
   });
 }
 function applyLocks() {
-  for (let n = 0; n <= 12; n++) {
+  for (let n = 0; n <= 15; n++) {
     const sec = section(n); if (!sec) continue;
     const lock = !unlocked(n);
     sec.classList.toggle("locked", lock);
@@ -1187,7 +1393,7 @@ function applyLocks() {
     chip.setAttribute("aria-disabled", lock ? "true" : "false");
     chip.innerHTML = lock
       ? `<svg aria-hidden="true"><use href="#i-lock"/></svg>${LABELS[n]}`
-      : (S.done[n] && n > 0 && n < 12 ? `<svg aria-hidden="true"><use href="#i-check"/></svg>${LABELS[n]}` : LABELS[n]);
+      : (S.done[n] && n > 0 && n < 15 ? `<svg aria-hidden="true"><use href="#i-check"/></svg>${LABELS[n]}` : LABELS[n]);
   }
 }
 function complete(n) {
@@ -1196,7 +1402,7 @@ function complete(n) {
   const nx = section(n + 1);
   if (nx) {
     nx.classList.remove("unlocking"); void nx.offsetWidth; nx.classList.add("unlocking");
-    if (n > 0) toast(n === 10 ? "Certificate unlocked" : n === 11 ? "Open Studio unlocked" : `Stage ${LABELS[n + 1]} unlocked`);
+    if (n > 0) toast(n === 13 ? "Summary unlocked" : n === 14 ? "Open Studio unlocked" : `Stage ${LABELS[n + 1]} unlocked`);
     Steps[n + 1]?.onUnlock?.();
   }
 }
@@ -1211,7 +1417,6 @@ document.addEventListener("click", e => {
   if (b) goTo(+b.dataset.next);
 });
 
-/* say / toast / press */
 const ICON = { good: "✓", warn: "?", bad: "!", info: "i" };
 function say(el, kind, html) {
   if (typeof el === "string") el = $(el);
@@ -1238,14 +1443,14 @@ document.addEventListener("input", e => { if (e.target.type === "range") setRang
 const HINTS = {
   1: "Drag the model until you can see the two red residues. Click each one. If they hide behind the structure, keep rotating.",
   2: "You don't have to type anything. Just press Run generative AI and watch the log.",
-  3: "The cut-off is 70. Sort by reading the number: anything below 70 is discarded, anything 70 or above stays.",
-  4: "The cut-off is 0.60. Everything in this list already passed the fold check, so some of them may still fail here.",
+  3: "The cut-off is 70. Read the number on each row against that threshold — nothing else in the row tells you the answer.",
+  4: "The cut-off is 0.60. Everything in this list already passed the fold check, so some may still fail here.",
   5: "Even one off-target hit is a problem. Look at the number in the middle column.",
   6: "One strong MHC binder is enough to flag a candidate. This is the strictest filter in the funnel.",
   7: "Watch the two curves. One levels off below 2 Å. The other keeps climbing — that binder is coming apart.",
   8: "Press 'Ask UCB' to get a suggestion. Some positions give a bigger improvement than others — try a few and keep the best three.",
-  9: "Both triplets code for the same amino acid. The difference is speed: E. coli has far more tRNA for the first one.",
-  10: "All three answers follow the same principle: check before you build, and contain what you build.",
+  9: "The table above the codon picker shows a percentage for each triplet. Pick the higher one for each position — that's what E. coli uses most often.",
+  10: "Read the explanation under each option. The right answer protects people; the wrong ones just protect the schedule or sound convenient.",
 };
 let hintStep = 1;
 document.addEventListener("click", e => {
@@ -1328,7 +1533,6 @@ Steps[0] = {
       const cycle = (t % 9) / 9;
       const dock = clamp((cycle - 0.18) / 0.3, 0, 1);
       const dockEase = dock * dock * (3 - 2 * dock);
-      // ligand approaches from above and settles on the rim
       const lig = ligandBase.map(p => ({
         x: p.x * (1 - 0.25 * dockEase),
         y: p.y - 26 * (1 - dockEase) + 6 * dockEase,
@@ -1339,7 +1543,6 @@ Steps[0] = {
         hot: HOT.map(x => ({ ...x, on: dockEase > .85 })),
         chainColor: C.dock
       });
-      // ligand chain
       const P = lig.map(p => project3(p, rot, scale, cx, cy, 300));
       ctx.globalAlpha = 0.85;
       for (let i = 0; i < P.length - 1; i++) {
@@ -1366,12 +1569,12 @@ Steps[0] = {
 };
 
 /* ============================================================
-   11 · STAGE 1.1 — target docking setup
+   11 · STAGE 1.1
    ============================================================ */
 Steps[1] = (() => {
   const rot = { yaw: 0.45, pitch: -0.22 };
   let pinned = { 82: false, 85: false };
-  let drag = null, moved = 0, hover = null, hotPts = [];
+  let drag = null, moved = 0, hotPts = [];
 
   function setSeg(res, on) {
     const seg = $(`#contig .seg[data-hot="${res}"]`);
@@ -1444,7 +1647,7 @@ Steps[1] = (() => {
 })();
 
 /* ============================================================
-   12 · STAGE 1.2 — generative AI
+   12 · STAGE 1.2
    ============================================================ */
 function ribbonSVG(seed, color) {
   const R = mulberry32(seed);
@@ -1494,7 +1697,6 @@ Steps[2] = (() => {
       $("#genBar").style.width = "0%";
       $("#genReset").disabled = true;
       $("#genRun").disabled = false;
-      say("#s2say", "", "");
       $("#s2say").innerHTML = "";
     });
   }
@@ -1546,17 +1748,23 @@ Steps[2] = (() => {
 })();
 
 /* ============================================================
-   13 · funnel stages (2.1 – 2.4)
+   13 · INTERLUDE checkpoint (Stage 1 complete) — step 3
+   ============================================================ */
+Steps[3] = {
+  init() { /* static content */ },
+  restore() { complete(3); }
+};
+
+/* ============================================================
+   14 · funnel stages 2.1–2.4 (steps 4–7)
    ============================================================ */
 function funnelStep(n, opts) {
   const rule = RULES[n];
   const metricHTML = opts.metric;
-  const compare = opts.compare;
-  const metricLabel = opts.metricLabel;
   return {
     init() {
       const list = survivorsAfter(n - 1);
-      const root = $(`#f${n - 2}`);
+      const root = $(`#f${n - 3}`);
       if (!root) return;
       root.innerHTML = list.map(c => `
         <button class="fr-row" data-id="${c.id}" aria-pressed="false">
@@ -1569,14 +1777,15 @@ function funnelStep(n, opts) {
         const row = e.target.closest(".fr-row"); if (!row) return;
         const on = row.getAttribute("aria-pressed") !== "true";
         row.setAttribute("aria-pressed", on ? "true" : "false");
-        row.querySelector(".rstate").textContent = on ? "discard" : "keep";
-        row.querySelector(".rstate").className = "rstate" + (on ? " no" : " ok");
+        const st = row.querySelector(".rstate");
+        st.textContent = on ? "discard" : "keep";
+        st.className = "rstate" + (on ? " no" : " ok");
       });
-      $(`#f${n - 2}check`).addEventListener("click", check);
+      $(`#f${n - 3}check`).addEventListener("click", check);
     },
     restore() {
       const list = survivorsAfter(n - 1);
-      const root = $(`#f${n - 2}`);
+      const root = $(`#f${n - 3}`);
       if (root) list.forEach(c => {
         const row = $(`.fr-row[data-id="${c.id}"]`, root);
         if (!row) return;
@@ -1593,7 +1802,7 @@ function funnelStep(n, opts) {
 
   function check() {
     const list = survivorsAfter(n - 1);
-    const root = $(`#f${n - 2}`);
+    const root = $(`#f${n - 3}`);
     let wrong = 0, correctDrop = 0;
     list.forEach(c => {
       const row = $(`.fr-row[data-id="${c.id}"]`, root);
@@ -1609,25 +1818,23 @@ function funnelStep(n, opts) {
       }
     });
     if (wrong === 0) finish(false, correctDrop);
-    else say(`#f${n - 2}out`, "warn",
+    else say(`#f${n - 3}out`, "warn",
       `${wrong} row${wrong > 1 ? "s" : ""} still don't match the rule. The rule is: <b>${opts.ruleText}</b>. Check every row against that number.`);
   }
 
-  function finish(quiet, dropped) {
+  function finish(quiet) {
     const list = survivorsAfter(n - 1);
     list.forEach(c => {
-      const row = $(`.fr-row[data-id="${c.id}"]`, $(`#f${n - 2}`));
+      const row = $(`.fr-row[data-id="${c.id}"]`, $(`#f${n - 3}`));
       if (!row) return;
       const drop = !rule.pass(c);
       row.classList.add(drop ? "drop" : "keep");
     });
     const left = survivorsAfter(n);
     if (!quiet) {
-      say(`#f${n - 2}out`, "good",
+      say(`#f${n - 3}out`, "good",
         `Correct. <b>${list.length - left.length}</b> discarded, <b>${left.length}</b> still standing.`);
     }
-    const disc = $(`#f${n - 2}disc`) || $(`#f${opts.disc}`);
-    $("#f1disc");
     const discEl = $(opts.disc);
     if (discEl) discEl.hidden = false;
     opts.onDone(left);
@@ -1636,32 +1843,28 @@ function funnelStep(n, opts) {
 }
 
 /* 2.1 */
-Steps[3] = (() => {
-  const base = funnelStep(3, {
+Steps[4] = (() => {
+  const base = funnelStep(4, {
     ruleText: "keep pLDDT ≥ 70",
-    metric: c => `<span class="mbar"><i style="width:${c.plddt}%;background:${PLDDT_COLOR(c.plddt)}"></i></span><b>${fmt(c.plddt)}</b>`,
+    metric: c => `<span class="mbar"><i style="width:${c.plddt}%"></i></span><b>${fmt(c.plddt)}</b>`,
     disc: "#f1disc",
-    onDone(left) {
+    onDone() {
       note("Discard anything with pLDDT < 70");
       value("plddt", "Fold cut-off", "pLDDT ≥ 70");
       badge("pLDDT"); badge("funnel");
     }
   });
   return {
-    init() {
-      base.init();
-      $("#f1say").innerHTML = "";
-      say("#f1say", "info", "Click a row to mark it for discarding. Green rows are the ones you keep.");
-    },
+    init() { base.init(); say("#f1say", "info", "Click a row to mark it for discarding. Green rows are the ones you keep."); },
     restore() { base.restore(); }
   };
 })();
 
 /* 2.2 */
-Steps[4] = (() => {
-  const base = funnelStep(4, {
+Steps[5] = (() => {
+  const base = funnelStep(5, {
     ruleText: "keep ipTM ≥ 0.60",
-    metric: c => `<span class="mbar"><i style="width:${c.iptm * 100}%;background:${c.iptm >= .6 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.iptm.toFixed(2)}</b>`,
+    metric: c => `<span class="mbar"><i style="width:${c.iptm * 100}%"></i></span><b>${c.iptm.toFixed(2)}</b>`,
     disc: "#f2disc",
     onDone() {
       note("Discard anything with ipTM < 0.60");
@@ -1670,19 +1873,16 @@ Steps[4] = (() => {
     }
   });
   return {
-    init() {
-      base.init();
-      say("#f2say", "info", "These 8 all fold. Now we ask whether they <i>hold on</i>.");
-    },
+    init() { base.init(); say("#f2say", "info", "These 8 all fold. Now we ask whether they <i>hold on</i>."); },
     restore() { base.restore(); }
   };
 })();
 
 /* 2.3 */
-Steps[5] = (() => {
-  const base = funnelStep(5, {
+Steps[6] = (() => {
+  const base = funnelStep(6, {
     ruleText: "keep candidates with 0 off-target hits",
-    metric: c => `<span class="mbar"><i style="width:${clamp(c.off / 3 * 100, 4, 100)}%;background:${c.off === 0 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.off} hit${c.off === 1 ? "" : "s"}</b>`,
+    metric: c => `<span class="mbar"><i style="width:${clamp(c.off / 3 * 100, 4, 100)}%"></i></span><b>${c.off} hit${c.off === 1 ? "" : "s"}</b>`,
     disc: "#f3disc",
     onDone() {
       note("Discard any candidate that matches a human protein");
@@ -1691,19 +1891,16 @@ Steps[5] = (() => {
     }
   });
   return {
-    init() {
-      base.init();
-      say("#f3say", "info", "MMseqs2 compares each sequence to every human protein. One hit is enough to be dangerous.");
-    },
+    init() { base.init(); say("#f3say", "info", "MMseqs2 compares each sequence to every human protein. One hit is enough to be dangerous."); },
     restore() { base.restore(); }
   };
 })();
 
 /* 2.4 */
-Steps[6] = (() => {
-  const base = funnelStep(6, {
+Steps[7] = (() => {
+  const base = funnelStep(7, {
     ruleText: "keep candidates with 0 strong MHC binders",
-    metric: c => `<span class="mbar"><i style="width:${clamp(c.mhc / 3 * 100, 4, 100)}%;background:${c.mhc === 0 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.mhc} binder${c.mhc === 1 ? "" : "s"}</b>`,
+    metric: c => `<span class="mbar"><i style="width:${clamp(c.mhc / 3 * 100, 4, 100)}%"></i></span><b>${c.mhc} binder${c.mhc === 1 ? "" : "s"}</b>`,
     disc: "#f4disc",
     onDone() {
       note("Discard anything the immune system might recognise");
@@ -1712,18 +1909,23 @@ Steps[6] = (() => {
     }
   });
   return {
-    init() {
-      base.init();
-      say("#f4say", "info", "The strictest filter. Anything the body might flag as foreign gets removed here.");
-    },
+    init() { base.init(); say("#f4say", "info", "The strictest filter. Anything the body might flag as foreign gets removed here."); },
     restore() { base.restore(); }
   };
 })();
 
 /* ============================================================
-   14 · STAGE 3.1 — molecular dynamics
+   15 · INTERLUDE checkpoint (Stage 2 complete) — step 8
    ============================================================ */
-Steps[7] = (() => {
+Steps[8] = {
+  init() { /* static */ },
+  restore() { complete(8); }
+};
+
+/* ============================================================
+   16 · STAGE 3.1 — MD simulation (step 9)
+   ============================================================ */
+Steps[9] = (() => {
   let progress = 0, running = false, ran = false, picked = null;
   const NS = 20;
   const rmsdA = t => 1.05 + 2.75 * (1 - Math.exp(-t * 0.28)) + 0.10 * Math.sin(t * 2.4);
@@ -1731,12 +1933,10 @@ Steps[7] = (() => {
 
   function drawComplex(ctx, w, h, rmsd, t, stable) {
     const cx = w / 2, baseY = h * 0.74;
-    // target arc
     for (let i = 0; i < 9; i++) {
       const a = (i / 8 - .5) * Math.PI * 1.0;
       bead(ctx, cx + Math.sin(a) * w * 0.36, baseY + Math.cos(a) * 9, 6.5, C.dock, .95);
     }
-    // binder beads
     const drift = stable ? 0 : clamp((rmsd - 1) * 7, 0, 22);
     for (let i = 0; i < 7; i++) {
       const x = cx + (i - 3) * w * 0.072 + Math.sin(t * 2.1 + i) * 1.4 + (i - 3) * drift * 0.16;
@@ -1755,7 +1955,6 @@ Steps[7] = (() => {
         xTicks: [0, 5, 10, 15, 20], yTicks: [0, 1, 2, 3, 4, 5],
         xLabel: "nanoseconds", yLabel: "RMSD (Å)", pad: { b: 34, l: 48 }
       });
-      // 2 Å threshold
       ctx.setLineDash([6, 4]); ctx.strokeStyle = C.warn; ctx.lineWidth = 1.6;
       ctx.beginPath(); ctx.moveTo(a.X(0), a.Y(2)); ctx.lineTo(a.X(NS), a.Y(2)); ctx.stroke();
       ctx.setLineDash([]);
@@ -1830,7 +2029,7 @@ Steps[7] = (() => {
     value("winner", "Lead candidate", "MD2B-10");
     value("rmsd", "RMSD after 20 ns", "1.4 Å");
     badge("molecular dynamics"); badge("RMSD");
-    complete(7);
+    complete(9);
   }
 
   function restore() {
@@ -1850,9 +2049,9 @@ Steps[7] = (() => {
 })();
 
 /* ============================================================
-   15 · STAGE 3.2 — in silico evolution
+   17 · STAGE 3.2 — evolution (step 10)
    ============================================================ */
-Steps[8] = (() => {
+Steps[10] = (() => {
   const BASE = "MTVQELLRELAGLKT";
   const LOCKED = new Set([0, 4, 7, 10, 12]);
   const OPTIONS = {
@@ -1868,11 +2067,7 @@ Steps[8] = (() => {
     14: [["S", -0.20], ["V", -0.10], ["A", +0.15]]
   };
   const START = -6.6, TARGET = -8.0;
-  let muts = {};         // index -> residue
-  let history = [];      // stack for undo
-  let visits = {};       // index -> count
-  let bestSeen = {};     // index -> best delta
-  let totalTries = 0;
+  let muts = {}, history = [], visits = {}, bestSeen = {}, totalTries = 0;
 
   const seqNow = () => BASE.split("").map((ch, i) => muts[i] ?? ch).join("");
   const dgNow = () => {
@@ -1930,7 +2125,7 @@ Steps[8] = (() => {
         openMenu(i);
       });
     });
-    if (dg <= TARGET && !S.done[8]) finish();
+    if (dg <= TARGET && !S.done[10]) finish();
   }
 
   function openMenu(i) {
@@ -1973,9 +2168,8 @@ Steps[8] = (() => {
     const scored = Object.keys(OPTIONS).map(k => {
       const i = +k;
       const n = visits[i] || 0;
-      const mu = bestSeen[i] ?? 0;               // most negative = best
+      const mu = bestSeen[i] ?? 0;
       const bonus = c * Math.sqrt(Math.log(totalTries + 1) / (n + 0.5));
-      // UCB for minimisation: lower mu is better, so score = mu - bonus
       return { i, n, mu, bonus, score: mu - bonus };
     }).sort((a, b) => a.score - b.score);
     const best = scored[0];
@@ -1999,14 +2193,13 @@ Steps[8] = (() => {
     note("Every mutation was scored by a model, not a pipette");
     value("dg", "Binding energy ΔG", `−${(-dg).toFixed(1)} kcal/mol`);
     badge("binding free energy"); badge("Bayesian optimisation");
-    if (!S.done[8]) {
+    if (!S.done[10]) {
       say("#evoLog", "good", `<b>ΔG = −${(-dg).toFixed(1)} kcal/mol.</b> That's past the −8.0 target. Your peptide now binds strongly enough to be worth synthesising.`);
-      complete(8);
+      complete(10);
     }
   }
 
   function restore() {
-    // apply a canonical winning set: positions 2, 3, 14 → I, A, R
     muts = { 1: "A", 2: "I", 13: "R" };
     history = [];
     render();
@@ -2016,21 +2209,71 @@ Steps[8] = (() => {
 })();
 
 /* ============================================================
-   16 · STAGE 4.1 — reverse translation
+   18 · INTERLUDE checkpoint (Stage 3 complete) — step 11
    ============================================================ */
-Steps[9] = (() => {
-  const CODONS = {
-    A: ["GCG", "GCA"], C: ["TGC", "TGT"], D: ["GAT", "GAC"], E: ["GAA", "GAG"],
-    F: ["TTC", "TTT"], G: ["GGC", "GGG"], H: ["CAT", "CAC"], I: ["ATT", "ATA"],
-    K: ["AAA", "AAG"], L: ["CTG", "CTA"], M: ["ATG", "ATG"], N: ["AAT", "AAC"],
-    P: ["CCG", "CCA"], Q: ["CAG", "CAA"], R: ["CGT", "CGG"], S: ["AGC", "TCG"],
-    T: ["ACC", "ACA"], V: ["GTT", "GTA"], W: ["TGG", "TGG"], Y: ["TAT", "TAC"]
-  };
-  const POS = [1, 5, 8, 11, 14];
+Steps[11] = {
+  init() { /* static */ },
+  restore() { complete(11); }
+};
+
+/* ============================================================
+   19 · STAGE 4.1 — reverse translation (step 12)
+   ============================================================ */
+/* Preferred codons from the Kazusa E. coli K-12 codon usage table.
+   Second entry in each pair is the disfavoured alternative; usage % is per family. */
+const CODON_DATA = {
+  // aa : [ [preferred, pct], [alternative, pct] ]
+  A: [["GCG", 36], ["GCA", 20]],
+  C: [["TGC", 56], ["TGT", 44]],
+  D: [["GAT", 63], ["GAC", 37]],
+  E: [["GAA", 69], ["GAG", 31]],
+  F: [["TTC", 57], ["TTT", 43]],
+  G: [["GGC", 44], ["GGG", 12]],
+  H: [["CAT", 57], ["CAC", 43]],
+  I: [["ATT", 51], ["ATA", 5]],
+  K: [["AAA", 76], ["AAG", 24]],
+  L: [["CTG", 52], ["CTA", 4]],
+  M: [["ATG", 100], ["ATG", 100]],
+  N: [["AAC", 56], ["AAT", 44]],
+  P: [["CCG", 53], ["CCA", 19]],
+  Q: [["CAG", 66], ["CAA", 34]],
+  R: [["CGT", 38], ["CGG", 5]],
+  S: [["AGC", 28], ["TCG", 15]],
+  T: [["ACC", 44], ["ACA", 13]],
+  V: [["GTT", 26], ["GTA", 15]],
+  W: [["TGG", 100], ["TGG", 100]],
+  Y: [["TAT", 57], ["TAC", 43]]
+};
+const AA_FULL = {
+  A: "Ala", C: "Cys", D: "Asp", E: "Glu", F: "Phe", G: "Gly", H: "His", I: "Ile",
+  K: "Lys", L: "Leu", M: "Met", N: "Asn", P: "Pro", Q: "Gln", R: "Arg", S: "Ser",
+  T: "Thr", V: "Val", W: "Trp", Y: "Tyr"
+};
+
+Steps[12] = (() => {
+  const POS = [1, 5, 8, 11, 14];   // positions to translate (0-indexed)
   let chosen = {};
   let solvedCount = 0;
 
   const winSeq = () => S.data.winner?.seq || "MTVQELLRELAGLKT";
+
+  function buildCodonTable() {
+    // Show all families that appear in the winning sequence, in order of appearance
+    const seq = winSeq();
+    const seen = new Set();
+    const rows = [];
+    for (const ch of seq) {
+      if (seen.has(ch)) continue;
+      seen.add(ch);
+      const data = CODON_DATA[ch];
+      if (!data) continue;
+      const [p, a] = data;
+      const isSame = p[0] === a[0];
+      rows.push(`<tr class="pref"><td>${AA_FULL[ch] || ch}</td><td>${ch}</td><td>${p[0]}</td><td>${p[1]}%</td></tr>`);
+      if (!isSame) rows.push(`<tr><td></td><td></td><td>${a[0]}</td><td>${a[1]}%</td></tr>`);
+    }
+    return `<thead><tr><th>Amino acid</th><th>Letter</th><th>Codon</th><th>Usage in E. coli</th></tr></thead><tbody>${rows.join("")}</tbody>`;
+  }
 
   function init() {
     const seq = winSeq();
@@ -2038,15 +2281,22 @@ Steps[9] = (() => {
       `<span class="aa" style="cursor:default"><span class="r">${ch}</span><span class="p">${i + 1}</span></span>`
     ).join("");
 
+    $("#codonTable").innerHTML = buildCodonTable();
+
     $("#codonRows").innerHTML = POS.map(i => {
       const aa = seq[i];
-      const pair = CODONS[aa] || ["GCT", "GCC"];
-      const opts = pair[0] === pair[1] ? [pair[0]] : [pair[0], pair[1]];
+      const data = CODON_DATA[aa] || [["GCT", 50], ["GCC", 50]];
+      const [pref, alt] = data;
+      const opts = pref[0] === alt[0] ? [pref] : [pref, alt];
+      // Shuffle so the preferred codon is not always on the left
       const shuffled = opts.length > 1 && (i % 2 === 1) ? [opts[1], opts[0]] : opts;
-      return `<div class="codon-row" data-i="${i}">
-        <span class="aa-badge">${aa}</span>
+      return `<div class="codon-row" data-i="${i}" data-pref="${pref[0]}">
+        <span class="aa-badge" title="${AA_FULL[aa] || aa}">${aa}</span>
         <div class="codon-opts">
-          ${shuffled.map(c => `<button class="codon" data-c="${c}" data-ok="${c === pair[0] ? "1" : "0"}">${c}</button>`).join("")}
+          ${shuffled.map(o => {
+            const [codon, pct] = o;
+            return `<button class="codon" data-c="${codon}" data-pct="${pct}">${codon}<span class="pct">${pct}%</span></button>`;
+          }).join("")}
           <span class="kbd-hint" style="align-self:center">position ${i + 1}</span>
         </div>
       </div>`;
@@ -2056,24 +2306,26 @@ Steps[9] = (() => {
       const b = e.target.closest(".codon"); if (!b) return;
       const row = b.closest(".codon-row");
       if (row.dataset.done === "1") return;
-      if (b.dataset.ok === "1") {
+      const pref = row.dataset.pref;
+      if (b.dataset.c === pref) {
         row.dataset.done = "1";
         row.querySelectorAll(".codon").forEach(x => x.classList.remove("no"));
         b.classList.add("ok");
         row.querySelectorAll(".codon").forEach(x => { if (x !== b) x.disabled = true; });
+        chosen[row.dataset.i] = b.dataset.c;
         solvedCount++;
-        say("#codonSay", "good", `Correct — <b>${b.dataset.c}</b>. <i>E. coli</i> carries plenty of tRNA for this codon, so the ribosome doesn't stall. (${solvedCount}/${POS.length})`);
+        say("#codonSay", "good", `Correct — <b>${b.dataset.c}</b> is used <b>${b.dataset.pct}%</b> of the time in <i>E. coli</i>. The ribosome finds tRNA for it almost instantly. (${solvedCount}/${POS.length})`);
         if (solvedCount === POS.length) finish();
       } else {
         b.classList.add("no");
-        say("#codonSay", "warn", `<b>${b.dataset.c}</b> also codes for that amino acid — but it is a rare codon in <i>E. coli</i>. The ribosome would slow down or stall. Try the other one.`);
+        say("#codonSay", "warn", `<b>${b.dataset.c}</b> also codes for that amino acid — but it is only used <b>${b.dataset.pct}%</b> of the time, versus <b>${row.dataset.pref}</b> on the other side. The ribosome would pause waiting for the rare tRNA. Try the higher-percentage one.`);
       }
     });
   }
 
   function finish() {
     const seq = winSeq();
-    const optimal = seq.split("").map(ch => (CODONS[ch] || ["GCT"])[0]).join(" ");
+    const optimal = seq.split("").map(ch => (CODON_DATA[ch]?.[0]?.[0]) || "GCT").join(" ");
     const gene = "ATG " + optimal + " TAA";
     $("#geneWrap").hidden = false;
     $("#geneOut").innerHTML = gene.replace(/(ATG|TAA)/g, "<b>$1</b>");
@@ -2083,79 +2335,101 @@ Steps[9] = (() => {
     note("Same protein, many possible genes — pick the one the cell reads fastest");
     value("gene", "Gene length", gene.replace(/ /g, "").length + " bp");
     badge("codon optimisation");
-    complete(9);
+    complete(12);
   }
 
   function restore() {
     const seq = winSeq();
-    POS.forEach((i, k) => {
+    POS.forEach(i => {
       const row = $(`.codon-row[data-i="${i}"]`);
       if (!row) return;
       row.dataset.done = "1";
-      const aa = seq[i];
-      const ok = (CODONS[aa] || ["GCT"])[0];
+      const pref = row.dataset.pref;
       row.querySelectorAll(".codon").forEach(x => {
-        if (x.dataset.c === ok) x.classList.add("ok"); else x.disabled = true;
+        if (x.dataset.c === pref) { x.classList.add("ok"); chosen[i] = pref; }
+        else x.disabled = true;
       });
-      solvedCount = k + 1;
     });
+    solvedCount = POS.length;
     finish();
   }
   return { init, restore };
 })();
 
 /* ============================================================
-   17 · STAGE 4.2 — quiz + certificate
+   20 · STAGE 4.2 — safety quiz (step 13)
    ============================================================ */
 const QUIZ = [
   {
     q: "Your designed gene goes into a disabled lab strain of <i>E. coli</i> that cannot survive outside a rich medium. What biosafety level does this work need?",
-    a: ["BSL-1", "BSL-3", "BSL-4"],
-    ok: 0,
-    why: "A non-pathogenic, disabled lab strain handled with standard hygiene is BSL-1. Nothing here is dangerous."
+    opts: [
+      { t: "BSL-1", ok: true,  tag: "standard lab hygiene",
+        ex: "A non-pathogenic, disabled lab strain handled with standard hygiene and no special containment." },
+      { t: "BSL-3", ok: false, tag: "respirator + sealed room",
+        ex: "That level is for pathogens like <i>M. tuberculosis</i>. Our strain cannot infect anyone — this would be overkill and unnecessary cost." },
+      { t: "BSL-4", ok: false, tag: "full positive-pressure suit",
+        ex: "Reserved for viruses like Ebola. Nothing here has pandemic potential or a treatment-resistant pathway." }
+    ],
+    why: "A non-pathogenic, disabled lab strain handled with standard hygiene is BSL-1. Nothing here is dangerous — but saying BSL-4 'to be safe' wastes containment facilities that are needed for real pathogens."
   },
   {
     q: "Before ordering the DNA, what should you screen the sequence against?",
-    a: ["A database of toxins and virulence genes", "The internet, for similar-looking proteins", "Nothing — the AI already checked"],
-    ok: 0,
+    opts: [
+      { t: "A database of toxins and virulence genes", ok: true, tag: "biosecurity screen",
+        ex: "Commercial DNA synthesis providers run every order against curated lists of hazardous sequences. Screening before ordering is standard and often legally required." },
+      { t: "The internet, for similar-looking proteins", ok: false, tag: "not systematic",
+        ex: "A search engine is not a curated database. It can miss homologues of a known toxin and it cannot be audited — biosecurity screens must be reproducible." },
+      { t: "Nothing — the AI already checked", ok: false, tag: "wrong assumption",
+        ex: "The AI was trained to fold proteins, not to audit their safety. Every AI-designed sequence still needs a downstream biosecurity check before anyone makes it." }
+    ],
     why: "Every synthesised sequence is screened against toxin and virulence databases before it is made. This is standard practice and a legal requirement in many countries."
   },
   {
     q: "Your peptide is meant for a wound dressing. Which result would stop you from proceeding?",
-    a: ["A strong predicted MHC-II binder", "A pLDDT of 94", "A ΔG of −8.4 kcal/mol"],
-    ok: 0,
+    opts: [
+      { t: "A strong predicted MHC-II binder", ok: true, tag: "immune alarm",
+        ex: "A strong MHC-II hit means T-cells will likely recognise the peptide as foreign. On a wound dressing, that could trigger inflammation instead of healing it — the opposite of what we want." },
+      { t: "A pLDDT of 94", ok: false, tag: "excellent fold",
+        ex: "94 is very high confidence. The model is saying the predicted structure is almost certainly correct. This is what you hope to see." },
+      { t: "A ΔG of −8.4 kcal/mol", ok: false, tag: "strong binding",
+        ex: "−8.4 is past the −8.0 target. This is exactly the strong grip you were mutating toward. It is a good sign, not a red flag." }
+    ],
     why: "A strong MHC binder means the immune system may attack your own medicine. The other two results are exactly what you want."
   }
 ];
 
-Steps[10] = (() => {
-  let answered = 0, correct = 0;
+Steps[13] = (() => {
+  let correct = 0;
   function init() {
     $("#quiz").innerHTML = QUIZ.map((item, qi) => `
       <div class="q" data-q="${qi}">
         <p>${qi + 1}. ${item.q}</p>
-        <div class="choices">
-          ${item.a.map((a, ai) => `<button class="choice" data-a="${ai}">${a}</button>`).join("")}
+        <div style="display:grid;gap:8px">
+          ${item.opts.map((o, oi) => `
+            <button class="opt" data-a="${oi}">
+              <span class="hd"><span>${o.t}</span><span class="tag">${o.tag}</span></span>
+              <span class="ex">${o.ex}</span>
+            </button>`).join("")}
         </div>
         <div class="fb"></div>
       </div>`).join("");
     $("#quiz").addEventListener("click", e => {
-      const b = e.target.closest(".choice"); if (!b) return;
+      const b = e.target.closest(".opt"); if (!b) return;
       const wrap = b.closest(".q");
       const qi = +wrap.dataset.q;
       if (wrap.dataset.done === "1") return;
-      const ai = +b.dataset.a;
-      if (ai === QUIZ[qi].ok) {
+      const oi = +b.dataset.a;
+      const o = QUIZ[qi].opts[oi];
+      if (o.ok) {
         wrap.dataset.done = "1";
         b.classList.add("good");
-        wrap.querySelectorAll(".choice").forEach(x => { if (x !== b) x.disabled = true; });
+        wrap.querySelectorAll(".opt").forEach(x => { if (x !== b) x.disabled = true; });
         wrap.querySelector(".fb").innerHTML = `<div class="say good"><span class="ic">✓</span><span>${QUIZ[qi].why}</span></div>`;
         correct++;
       } else {
         b.classList.add("meh");
-        wrap.querySelector(".fb").innerHTML = `<div class="say warn"><span class="ic">?</span><span>Not quite. Think about which answer protects people rather than which answer is convenient.</span></div>`;
+        wrap.querySelector(".fb").innerHTML = `<div class="say warn"><span class="ic">?</span><span>Not quite. The other options protect people and the environment. Think about which answer a safety officer would sign off on.</span></div>`;
       }
-      answered++;
       if (correct === QUIZ.length) finish();
     });
   }
@@ -2163,16 +2437,17 @@ Steps[10] = (() => {
     say("#quizSay", "good", "All three correct. Your design and your paperwork are both ready.");
     note("Screen before you synthesise");
     badge("BSL-1"); badge("biosecurity");
-    Steps[11].fill();
-    complete(10);
+    Steps[14].fill();
+    complete(13);
   }
   function restore() {
     QUIZ.forEach((item, qi) => {
       const wrap = $(`.q[data-q="${qi}"]`); if (!wrap) return;
       wrap.dataset.done = "1";
-      const b = wrap.querySelector(`.choice[data-a="${item.ok}"]`);
+      const oi = item.opts.findIndex(o => o.ok);
+      const b = wrap.querySelector(`.opt[data-a="${oi}"]`);
       b.classList.add("good");
-      wrap.querySelectorAll(".choice").forEach(x => { if (x !== b) x.disabled = true; });
+      wrap.querySelectorAll(".opt").forEach(x => { if (x !== b) x.disabled = true; });
       wrap.querySelector(".fb").innerHTML = `<div class="say good"><span class="ic">✓</span><span>${item.why}</span></div>`;
     });
     correct = QUIZ.length;
@@ -2182,18 +2457,11 @@ Steps[10] = (() => {
 })();
 
 /* ============================================================
-   18 · CERTIFICATE
+   21 · FINAL SUMMARY (step 14) — replaces certificate
    ============================================================ */
-Steps[11] = {
+Steps[14] = {
   init() {
-    $("#openStudioBtn").addEventListener("click", () => { complete(11); goTo(12); });
-    $("#certPrint").addEventListener("click", () => {
-      try { print(); } catch (e) { toast("Printing isn't available here. Take a screenshot instead."); }
-    });
-    const nameInput = $("#certName");
-    nameInput.value = S.data.name || "";
-    nameInput.addEventListener("input", () => { S.data.name = nameInput.value; save(); });
-    $("#certDate").textContent = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    $("#openStudioBtn").addEventListener("click", () => { complete(14); goTo(15); });
   },
   fill() {
     const w = S.data.winner || { id: "MD2B-10", seq: "MTVQELLRELAGLKT", plddt: 94.1, iptm: 0.91, dg: -8.2 };
@@ -2204,22 +2472,14 @@ Steps[11] = {
     $("#lcSeq").textContent = w.seq;
     const gene = S.data.gene || "";
     $("#lcGene").textContent = gene || "—";
-    const muts = w.muts ? Object.keys(w.muts).length : 3;
-    $("#lcRules").innerHTML = [
-      `Cover the hotspot and nothing else — the epitope is the whole brief.`,
-      `Filter cheapest-first: fold (pLDDT ≥ 70) → grip (ipTM ≥ 0.60) → safety (0 off-target hits) → immune (0 strong MHC binders).`,
-      `A good score is not the same as a stable structure — always simulate the motion.`,
-      `Bind tighter by mutating <b>${muts}</b> residue${muts === 1 ? "" : "s"}</b>, never the contact residues.`,
-      `64 codons, 20 amino acids: choose the fast ones for the host cell.`
-    ].map(r => `<li>${r}</li>`).join("");
   },
-  restore() { this.fill(); complete(10); }
+  restore() { this.fill(); complete(14); }
 };
 
 /* ============================================================
-   19 · OPEN STUDIO
+   22 · OPEN STUDIO (step 15)
    ============================================================ */
-Steps[12] = (() => {
+Steps[15] = (() => {
   const DEF = { plddt: 70, iptm: 0.60, mhc: 0 };
   const P = { ...DEF };
   const SL = [
@@ -2280,7 +2540,7 @@ Steps[12] = (() => {
 })();
 
 /* ============================================================
-   20 · optional maths panels
+   23 · optional maths panels
    ============================================================ */
 const FR = (a, b) => `<span class="fr"><span>${a}</span><span>${b}</span></span>`;
 const OP = o => `<span class="op">${o}</span>`;
@@ -2295,42 +2555,42 @@ const MATHS = {
     eq: `<span class="st">x<sub>t−1</sub> ${OP("=")} ${FR("1", "√α<sub>t</sub>")} ( x<sub>t</sub> ${OP("−")} ${FR("1 − α<sub>t</sub>", "√(1 − ᾱ<sub>t</sub>)")} ε<sub>θ</sub>(x<sub>t</sub>, t) )</span>`,
     key: [["ε<sub>θ</sub>", "the network's guess at the noise"], ["t", "how much noise is currently present"], ["the motif", "positions A82 / A85 are held fixed at every step"]]
   },
-  3: {
+  4: {
     bridge: "pLDDT is a per-residue confidence. AlphaFold was trained to predict how close its own prediction would land, so the number is not a guess about the protein — it is a calibrated statement about the model.",
     eq: `<span class="st">pLDDT<sub>i</sub> ${OP("≈")} 100 × P( error<sub>i</sub> &lt; 2 Å )</span>`,
     key: [["i", "one residue"], ["> 90", "confident enough for most work"], ["< 70", "the backbone is probably not real"]]
   },
-  4: {
+  5: {
     bridge: "ipTM measures whether the model is confident about the interface between two chains, separately from whether each chain folds correctly. It is a normalised score, so it can be compared across different complexes.",
     eq: `<span class="st">ipTM ${OP("=")} ${FR("1", "1 + d̄<sub>interface</sub> / d<sub>0</sub>")}</span>`,
     key: [["d̄", "average distance error at the interface"], ["d<sub>0</sub>", "a normalising length that grows with complex size"], ["0.60", "the usual bar for 'worth testing in the lab'"]]
   },
-  5: {
+  6: {
     bridge: "MMseqs2 looks for local alignments between your peptide and every human protein, then reports how surprising each match is. The E-value is the number of matches this good you would expect to find by chance in a database this size.",
     eq: `<span class="st">E ${OP("=")} K · m · n · e<sup>−λS</sup></span>`,
     key: [["S", "the alignment score"], ["K, λ", "constants fitted to the scoring matrix"], ["m, n", "lengths of the two sequences being compared"]]
   },
-  6: {
+  7: {
     bridge: "MHCflurry does not output a yes/no answer. It outputs a percentile rank: where does this peptide sit among millions of random peptides? A rank below 0.5% means it is in the top half-percent of binders — a strong flag.",
     eq: `<span class="st">rank<sub>i</sub> ${OP("=")} ${FR("#{ j : score<sub>j</sub> ≥ score<sub>i</sub> }", "N")} × 100%</span>`,
     key: [["score", "predicted presentation strength"], ["rank < 0.5%", "strong binder — discard"], ["why rank", "raw scores are not comparable across alleles"]]
   },
-  7: {
+  9: {
     bridge: "Molecular dynamics integrates Newton's equations for every atom. RMSD is simply the average distance each atom has moved from its starting position after the structure is best-fitted back onto the original.",
-    eq: `<span class="st">RMSD(t) ${OP("=")} √<span class="rad">${FR("1", "N")} <span class="big">Σ</span><sub>i=1</sub><sup>N</sup> ‖ r<sub>i</sub>(t) ${OP("−")} r<sub>i</sub>(0) ‖²</span></span>`,
+    eq: `<span class="st">RMSD(t) ${OP("=")} √<span class="rad">${FR("1", "N")} <span>Σ</span><sub>i=1</sub><sup>N</sup> ‖ r<sub>i</sub>(t) ${OP("−")} r<sub>i</sub>(0) ‖²</span></span>`,
     key: [["N", "number of atoms compared"], ["flat under 2 Å", "the fold is holding"], ["climbing past 2 Å", "the structure is unfolding"]]
   },
-  8: {
+  10: {
     bridge: "Every mutation is a gamble: it might improve binding, or it might not. Upper Confidence Bound is the classic way to gamble well — try the options that look good, but also try the ones you know least about, because your estimate of them is uncertain.",
     eq: `<span class="st">a<sub>i</sub> ${OP("=")} μ<sub>i</sub> ${OP("−")} c √<span class="rad">${FR("ln N", "n<sub>i</sub>")}</span></span>`,
     key: [["μ<sub>i</sub>", "best result seen at position i so far"], ["n<sub>i</sub>", "how many times i has been tried"], ["N", "total tries across all positions"], ["c", "exploration weight — bigger c means more curiosity"]]
   },
-  9: {
+  12: {
     bridge: "There are 4³ = 64 codons and only 20 amino acids, so the code is redundant. Different organisms prefer different codons for the same amino acid — matching the host's preference is free efficiency.",
     eq: `<span class="st">codon usage bias: ${FR("count(codon)", "count(synonymous family)")}</span>`,
     key: [["synonymous", "different codons, same amino acid"], ["highly expressed genes", "use the preferred codons almost exclusively"], ["why it matters", "a rare codon can stall the ribosome and cut yield"]]
   },
-  10: {
+  13: {
     bridge: "Risk is not a yes/no property. Each check answers a different question — does it fold, does it bind, does it resemble something dangerous, will the body attack it — and the design only moves forward when all four answers are acceptable.",
     eq: `<span class="st">accept ${OP("⟺")} pLDDT ≥ 70 ${OP("∧")} ipTM ≥ 0.60 ${OP("∧")} hits = 0 ${OP("∧")} MHC = 0</span>`,
     key: [["∧", "all of these must hold"], ["why not average them", "a design that fails one check is unusable, however good the others are"]]
@@ -2371,7 +2631,7 @@ function buildMaths() {
 }
 
 /* ============================================================
-   21 · chart helpers
+   24 · chart helpers
    ============================================================ */
 function axes(ctx, w, h, o) {
   const pad = Object.assign({ l: 44, r: 16, t: 20, b: 34 }, o.pad || {});
@@ -2406,7 +2666,7 @@ function polyline(ctx, pts, X, Y, color, width = 3, dash) {
 }
 
 /* ============================================================
-   22 · scroll effects
+   25 · scroll effects
    ============================================================ */
 function initScrollFx() {
   const secs = $$("[data-step]");
@@ -2443,21 +2703,21 @@ function initScrollFx() {
 }
 
 /* ============================================================
-   23 · boot
+   26 · boot
    ============================================================ */
 (function boot() {
   load();
   buildProgress();
-  for (let n = 0; n <= 12; n++) Steps[n]?.init?.();
+  for (let n = 0; n <= 15; n++) Steps[n]?.init?.();
   buildMaths();
-  for (let n = 1; n <= 12; n++) if (S.done[n]) Steps[n]?.restore?.();
+  for (let n = 1; n <= 15; n++) if (S.done[n]) Steps[n]?.restore?.();
   applyLocks();
   renderNotebook();
   $$('input[type="range"]').forEach(setRangeFill);
   initScrollFx();
   lastT = performance.now(); rafId = requestAnimationFrame(loop);
 
-  const next = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].find(n => S.done[0] && !S.done[n]);
+  const next = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].find(n => S.done[0] && !S.done[n]);
   if (next) { toast(`Welcome back. Continuing at ${NAMES[next]}.`); setTimeout(() => goTo(next), 500); }
 })();
 </script>
