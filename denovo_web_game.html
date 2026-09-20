@@ -1,0 +1,2465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>De Novo AI Bio-Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --ground:#EDF1F7; --surface:#FFFFFF; --surface-2:#E2E9F3; --ink:#0C1A2B; --ink-2:#4A5B72; --line:#C8D4E4;
+  --acc:#4B45D6; --acc-soft:#E2E0FB; --acc-ink:#FFFFFF;
+  --dock:#0E8C7F; --dock-soft:#CFEDE8;
+  --hot:#D9483A; --hot-soft:#F8DCD7;
+  --warn:#AF7B0F; --warn-soft:#F6E7C2;
+  --ok:#2B8F4C; --ok-soft:#D5EDDA;
+  --chain:#8496AC;
+  --focus:#1D5FD6;
+  --shadow:0 1px 2px rgba(12,26,43,.06),0 8px 24px rgba(12,26,43,.08);
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --hdr:64px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B121C; --surface:#131D2B; --surface-2:#1A2634; --ink:#E1EAF5; --ink-2:#93A6BE; --line:#27384C;
+    --acc:#8F8AFF; --acc-soft:#1D1B4A; --acc-ink:#0A0A22;
+    --dock:#3EC7B4; --dock-soft:#0F3733;
+    --hot:#FF7B66; --hot-soft:#3B1B15;
+    --warn:#E0AE41; --warn-soft:#372C0F;
+    --ok:#6FCB8B; --ok-soft:#12321C;
+    --chain:#5C7089;
+    --focus:#7FA8FF;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B121C; --surface:#131D2B; --surface-2:#1A2634; --ink:#E1EAF5; --ink-2:#93A6BE; --line:#27384C;
+  --acc:#8F8AFF; --acc-soft:#1D1B4A; --acc-ink:#0A0A22;
+  --dock:#3EC7B4; --dock-soft:#0F3733;
+  --hot:#FF7B66; --hot-soft:#3B1B15;
+  --warn:#E0AE41; --warn-soft:#372C0F;
+  --ok:#6FCB8B; --ok-soft:#12321C;
+  --chain:#5C7089;
+  --focus:#7FA8FF;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hdr) + 24px)}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.1;text-wrap:balance;margin:0;letter-spacing:-.01em}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:6px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+[hidden]{display:none!important}
+img{max-width:100%}
+
+/* ---------- header ---------- */
+.hdr{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:color-mix(in oklab,var(--ground) 88%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.hdr-in{max-width:1300px;margin:0 auto;padding-inline:20px;height:var(--hdr);display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:800;font-size:18px;white-space:nowrap;text-decoration:none;color:var(--ink)}
+.brand-mark{width:28px;height:28px;border-radius:9px;background:var(--acc);position:relative;overflow:hidden;flex:none}
+.brand-mark::before{content:"";position:absolute;inset:6px;border-radius:50%;border:2.5px solid var(--acc-soft);border-right-color:transparent;border-bottom-color:transparent;transform:rotate(35deg)}
+.progress{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;padding-block:4px}
+.progress::-webkit-scrollbar{display:none}
+.pchip{flex:none;min-width:36px;height:32px;padding:0 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);display:inline-flex;align-items:center;justify-content:center;gap:5px;font-family:var(--mono);font-size:12.5px;font-weight:700;color:var(--ink-2);transition:background .25s,border-color .25s,color .25s,transform .25s}
+.pchip svg{width:12px;height:12px}
+.pchip[aria-disabled="true"]{opacity:.55;cursor:not-allowed;background:transparent}
+.pchip.done{background:var(--acc-soft);border-color:var(--acc);color:var(--ink)}
+.pchip.current{background:var(--ink);border-color:var(--ink);color:var(--ground);transform:translateY(-1px)}
+.hdr-actions{display:flex;gap:8px;flex:none}
+.ghost{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 12px;font-size:14px;font-weight:700}
+.ghost:hover{border-color:var(--ink-2)}
+.nb-toggle{display:none;gap:6px}
+.scrollbar{position:absolute;left:0;bottom:-1px;height:3px;background:var(--acc);width:calc(var(--sp,0)*100%);transition:width .1s linear}
+
+/* ---------- layout ---------- */
+.shell{max-width:1300px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:36px;padding-block:28px 120px}
+main{min-width:0;display:flex;flex-direction:column;gap:28px}
+
+/* ---------- mission ---------- */
+.mission{position:relative}
+.m-top{padding-block:20px 10px;display:grid;gap:16px;max-width:790px}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);font-weight:700}
+.m-title{font-size:clamp(36px,5.6vw,68px);font-weight:800}
+.m-title em{font-style:normal;color:var(--acc)}
+.m-lede{font-size:clamp(17px,1.9vw,20px);color:var(--ink-2);max-width:64ch}
+.m-meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--ink-2)}
+.m-meta b{color:var(--ink)}
+.stage-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:6px}
+.stage-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 15px;display:grid;gap:5px;box-shadow:var(--shadow)}
+.stage-card .n{font-family:var(--mono);font-size:11.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.stage-card h4{font-size:16.5px}
+.stage-card p{font-size:13.5px;color:var(--ink-2)}
+.s1 .n{color:var(--dock)} .s2 .n{color:var(--acc)} .s3 .n{color:var(--warn)} .s4 .n{color:var(--ok)}
+.hero-wrap{margin-top:22px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow);position:relative}
+.hero-wrap canvas{display:block;width:100%;height:min(360px,52vh)}
+.hero-cap{position:absolute;left:16px;top:14px;font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink-2);letter-spacing:.06em;text-transform:uppercase;background:color-mix(in oklab,var(--surface) 82%,transparent);padding:4px 9px;border-radius:7px}
+.hero-key{position:absolute;right:16px;bottom:14px;display:flex;gap:14px;font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink-2);background:color-mix(in oklab,var(--surface) 82%,transparent);padding:6px 10px;border-radius:8px}
+.hero-key i{font-style:normal;display:inline-flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.mission-go{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding-block:8px 20px}
+
+/* ---------- buttons ---------- */
+.btn{border:0;border-radius:12px;padding:12px 20px;font-weight:700;font-size:16px;background:var(--ink);color:var(--ground);display:inline-flex;align-items:center;gap:8px;transition:transform .15s,box-shadow .2s,background .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}
+.btn:active{transform:translateY(1px)}
+.btn.acc{background:var(--acc);color:var(--acc-ink)}
+.btn.gel{background:var(--dock);color:#fff}
+.btn.soft{background:var(--surface-2);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.btn.big{padding:15px 26px;font-size:18px;border-radius:14px}
+.choice{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 14px;font-weight:700;text-align:left;transition:border-color .2s,background .2s,transform .15s}
+.choice:hover{border-color:var(--ink-2)}
+.choice[aria-pressed="true"]{border-color:var(--ink);background:var(--surface-2);box-shadow:inset 0 0 0 1px var(--ink)}
+.choice.good{border-color:var(--ok);background:var(--ok-soft);box-shadow:inset 0 0 0 1px var(--ok)}
+.choice.meh{border-color:var(--warn);background:var(--warn-soft)}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.kbd-hint{font-size:13px;color:var(--ink-2)}
+
+/* ---------- steps ---------- */
+.step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:28px clamp(18px,3vw,34px) 26px;box-shadow:var(--shadow);transition:opacity .5s,filter .5s}
+.step.locked{opacity:.55;filter:saturate(.3);box-shadow:none;background:transparent;border-style:dashed}
+.step.locked > .step-body,.step.locked > .step-foot{pointer-events:none;user-select:none;max-height:240px;overflow:hidden;-webkit-mask-image:linear-gradient(#000 20%,transparent);mask-image:linear-gradient(#000 20%,transparent)}
+.step.unlocking{animation:unlock .8s cubic-bezier(.2,.7,.2,1)}
+@keyframes unlock{0%{transform:scale(.985)}100%{transform:none}}
+.lock-veil{display:none;position:absolute;left:50%;top:110px;transform:translateX(-50%);z-index:3;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-weight:700;font-size:14px;color:var(--ink-2);white-space:nowrap;box-shadow:var(--shadow);align-items:center;gap:8px}
+.lock-veil svg{width:14px;height:14px}
+.step.locked .lock-veil{display:inline-flex}
+.step-head{display:grid;grid-template-columns:1fr auto;gap:6px 16px;align-items:start;margin-bottom:20px}
+.step-no{grid-column:1/-1;font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.step-no .t{color:var(--ink-2);font-weight:500;letter-spacing:0;text-transform:none}
+.step-done-pill{display:none;background:var(--ok-soft);color:var(--ink);border-radius:999px;padding:2px 10px;font-size:12px;letter-spacing:.02em}
+.step.done .step-done-pill{display:inline-block}
+.step h2{font-size:clamp(25px,3.1vw,35px);font-weight:800}
+.step .lede{grid-column:1;color:var(--ink-2);max-width:64ch;margin-top:4px}
+.hint-btn{grid-row:2;grid-column:2;align-self:start}
+.step-body{display:flex;flex-direction:column;gap:18px}
+.step-foot{display:flex;flex-direction:column;gap:14px;margin-top:20px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.split.wide{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.panel{background:var(--surface-2);border-radius:16px;padding:16px}
+.label{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-2)}
+.canvas-box{position:relative;background:var(--ground);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.canvas-box canvas{display:block;width:100%;height:100%;touch-action:none}
+.canvas-hint{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:11px;font-weight:700;color:var(--ink-2);background:color-mix(in oklab,var(--surface) 80%,transparent);padding:4px 8px;border-radius:6px;pointer-events:none}
+.say{font-size:16px;padding:12px 14px;border-radius:12px;background:var(--surface-2);display:flex;gap:10px;align-items:flex-start;animation:pop .35s cubic-bezier(.2,.8,.2,1.2)}
+.say.good{background:var(--ok-soft)}
+.say.warn{background:var(--warn-soft)}
+.say.bad{background:var(--hot-soft)}
+.say .ic{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--surface);font-family:var(--mono)}
+@keyframes pop{from{transform:translateY(6px) scale(.98);opacity:.2}to{transform:none;opacity:1}}
+
+/* discover */
+.discover{border:2px solid var(--acc);border-radius:16px;padding:16px 18px;display:grid;gap:10px;background:linear-gradient(135deg,var(--acc-soft),var(--surface) 72%);animation:pop .5s cubic-bezier(.2,.8,.2,1.1)}
+.discover .k{font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.discover .rule{font-family:var(--display);font-size:clamp(19px,2.3vw,25px);font-weight:700;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.tile{display:inline-block;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:4px 12px;animation:snap .5s cubic-bezier(.3,1.5,.5,1) both}
+.tile.m{border-color:var(--dock);color:var(--dock)}
+.tile.l{border-color:var(--hot);color:var(--hot)}
+.tile.o{border:0;background:transparent;padding:4px 2px}
+@keyframes snap{from{transform:translateY(-18px) rotate(-4deg);opacity:0}to{transform:none;opacity:1}}
+.sci{display:inline-flex;align-items:center;gap:8px;font-size:14px;border:1px dashed var(--ink-2);border-radius:999px;padding:4px 12px 4px 6px;color:var(--ink-2);width:max-content;max-width:100%;animation:pop .5s}
+.sci b{color:var(--ink)}
+.sci .flask{width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--ground);display:grid;place-items:center;font-size:11px;font-family:var(--mono);font-weight:700;flex:none}
+.next-btn{align-self:flex-start}
+
+/* ---------- protein viewer ---------- */
+.viewer{position:relative;background:radial-gradient(circle at 50% 42%,color-mix(in oklab,var(--surface) 92%,var(--acc-soft)),var(--ground));border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.viewer canvas{display:block;width:100%;height:100%;cursor:grab;touch-action:none}
+.viewer canvas:active{cursor:grabbing}
+.hot-chip{position:absolute;transform:translate(-50%,-50%);font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--hot);color:#fff;pointer-events:none;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.hot-chip.on{background:var(--ok)}
+
+/* ---------- contig ---------- */
+.contig{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-family:var(--mono);font-size:13px}
+.seg{border:1.5px solid var(--line);border-radius:8px;padding:4px 9px;background:var(--surface);color:var(--ink-2);font-weight:700}
+.seg.hot{border-color:var(--hot);background:var(--hot-soft);color:var(--ink)}
+.seg.hot.on{border-color:var(--ok);background:var(--ok-soft)}
+.sep{color:var(--ink-2);font-weight:700}
+
+/* ---------- generation log ---------- */
+.log{background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-family:var(--mono);font-size:12.5px;line-height:1.7;min-height:132px;max-height:200px;overflow:auto;color:var(--ink-2);white-space:pre-wrap}
+.log b{color:var(--ink)}
+.log .ok{color:var(--ok)}
+.log .ac{color:var(--acc)}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--acc);animation:blink 1s steps(1) infinite;vertical-align:-2px}
+@keyframes blink{50%{opacity:0}}
+.progbar{height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.progbar i{display:block;height:100%;background:var(--acc);width:0;transition:width .3s;border-radius:999px}
+
+/* ---------- candidate cards ---------- */
+.cand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:12px}
+.cand-card{border:1.5px solid var(--line);background:var(--surface);border-radius:16px;padding:12px;display:grid;gap:8px;text-align:left;transition:border-color .2s,transform .15s,box-shadow .2s;animation:pop .45s cubic-bezier(.2,.8,.2,1.1) both}
+.cand-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.cand-card .hd{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.cand-card .id{font-family:var(--mono);font-size:13px;font-weight:700}
+.cand-card .seq{font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--ink-2);word-break:break-all}
+.cand-card svg{width:100%;height:40px;display:block}
+
+/* ---------- funnel rows ---------- */
+.funnel{display:flex;flex-direction:column;gap:8px}
+.fr-row{display:grid;grid-template-columns:96px minmax(0,1fr) 132px 96px;gap:12px;align-items:center;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:9px 12px;text-align:left;transition:opacity .25s,border-color .2s,background .2s;animation:pop .35s both}
+.fr-row .rid{font-family:var(--mono);font-size:13px;font-weight:700}
+.fr-row .rseq{font-family:var(--mono);font-size:12px;color:var(--ink-2);letter-spacing:.05em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fr-row .rmetric{display:flex;align-items:center;gap:8px}
+.fr-row .rmetric b{font-family:var(--mono);font-size:13.5px;min-width:44px;text-align:right}
+.fr-row .rstate{font-family:var(--mono);font-size:11.5px;font-weight:700;text-align:right;color:var(--ink-2)}
+.fr-row[aria-pressed="true"]{opacity:.42;border-style:dashed;background:transparent}
+.fr-row[aria-pressed="true"] .rseq{text-decoration:line-through}
+.fr-row.keep{border-color:var(--ok)}
+.fr-row.drop{border-color:var(--hot);opacity:.35}
+.fr-row .rstate.ok{color:var(--ok)} .fr-row .rstate.no{color:var(--hot)}
+.mbar{flex:1;height:10px;border-radius:999px;background:var(--surface-2);overflow:hidden;min-width:40px}
+.mbar i{display:block;height:100%;border-radius:999px}
+.fr-row .go{display:flex;gap:6px;justify-content:flex-end}
+.fr-row button{font-size:12px;padding:5px 10px;border-radius:8px}
+
+/* ---------- evolution ---------- */
+.seq-strip{display:flex;flex-wrap:wrap;gap:5px}
+.aa{width:40px;height:52px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);display:grid;place-items:center;gap:0;font-family:var(--mono);transition:border-color .2s,transform .15s,background .2s;position:relative;padding:0}
+.aa .r{font-size:16px;font-weight:700;line-height:1}
+.aa .p{font-size:9.5px;color:var(--ink-2);line-height:1.6}
+.aa:hover:not(.locked){transform:translateY(-3px);border-color:var(--acc)}
+.aa.mut{border-color:var(--acc);background:var(--acc-soft)}
+.aa.locked{background:var(--surface-2);cursor:default;opacity:.85}
+.aa .lockmark{position:absolute;top:2px;right:3px;font-size:9px;opacity:.6}
+.aa.suggest{border-color:var(--warn);box-shadow:0 0 0 3px color-mix(in oklab,var(--warn) 25%,transparent)}
+.mut-menu{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.mut-opt{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 12px;font-family:var(--mono);font-size:14px;font-weight:700;display:inline-flex;gap:8px;align-items:center}
+.mut-opt:hover{border-color:var(--acc)}
+.mut-opt .d{font-size:12px;font-weight:700}
+.mut-opt .d.up{color:var(--ok)} .mut-opt .d.dn{color:var(--hot)}
+.gauge{height:22px;border-radius:999px;background:var(--surface-2);position:relative;overflow:hidden}
+.gauge i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--ok),var(--dock));border-radius:999px;transition:width .35s}
+.gauge .mark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink)}
+
+/* ---------- codon ---------- */
+.codon-row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;border-bottom:1px solid var(--line);padding-block:10px}
+.codon-row:last-child{border-bottom:0}
+.aa-badge{width:46px;height:46px;border-radius:12px;background:var(--surface-2);display:grid;place-items:center;font-family:var(--mono);font-size:19px;font-weight:700}
+.codon-opts{display:flex;gap:8px;flex-wrap:wrap}
+.codon{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 14px;font-family:var(--mono);font-size:15px;font-weight:700;letter-spacing:.08em;transition:border-color .2s,background .2s}
+.codon:hover{border-color:var(--acc)}
+.codon.ok{border-color:var(--ok);background:var(--ok-soft)}
+.codon.no{border-color:var(--hot);background:var(--hot-soft)}
+.gene{font-family:var(--mono);font-size:13.5px;letter-spacing:.1em;line-height:2;word-break:break-all;background:var(--ground);border:1px solid var(--line);border-radius:14px;padding:14px}
+.gene b{color:var(--acc)}
+
+/* ---------- certificate ---------- */
+.labcard{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:0;overflow:hidden;box-shadow:var(--shadow)}
+.lc-head{background:var(--ink);color:var(--ground);padding:24px clamp(18px,3vw,34px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:end}
+.lc-head h2{font-size:clamp(26px,3.2vw,38px);font-weight:800}
+.lc-head .eyebrow{color:var(--acc-soft)}
+.lc-body{padding:22px clamp(18px,3vw,34px) 28px;display:grid;gap:18px}
+.lc-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.lc-field{border-top:2px solid var(--ink);padding-top:8px;display:grid;gap:2px}
+.lc-field .v{font-family:var(--display);font-size:24px;font-weight:700}
+.lc-list{margin:0;padding-left:20px;display:grid;gap:4px}
+.quiz{display:grid;gap:14px}
+.quiz .q{display:grid;gap:8px}
+.quiz .q p{font-weight:700}
+
+/* ---------- notebook ---------- */
+.notebook{position:sticky;top:calc(var(--hdr) + 24px);align-self:start;max-height:calc(100vh - var(--hdr) - 48px);overflow:auto;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;display:grid;gap:16px;box-shadow:var(--shadow);background-image:repeating-linear-gradient(transparent 0 27px,color-mix(in oklab,var(--line) 55%,transparent) 27px 28px)}
+.nb-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.nb-head h3{font-size:19px;font-weight:800}
+.nb-count{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink-2)}
+.nb-sec{display:grid;gap:6px}
+.nb-sec ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.nb-sec li{font-size:14px;line-height:1.4;background:var(--surface);padding:6px 8px;border-radius:8px;border:1px solid var(--line)}
+.nb-sec li.fresh{animation:ink 1.2s}
+@keyframes ink{0%{background:var(--warn-soft);transform:translateX(8px)}100%{background:var(--surface)}}
+.nb-sec li.empty{border-style:dashed;color:var(--ink-2);background:transparent;font-style:italic}
+.nb-val{display:flex;justify-content:space-between;gap:8px}
+.nb-val b{font-family:var(--mono)}
+.nb-badges{display:flex;flex-wrap:wrap;gap:6px}
+.nb-badge{font-size:12.5px;padding:3px 8px;border-radius:999px;background:var(--ink);color:var(--ground);font-weight:700}
+.nb-close{display:none}
+
+/* dialog + toast */
+dialog{border:1px solid var(--line);border-radius:20px;padding:0;background:var(--surface);color:var(--ink);max-width:min(470px,calc(100vw - 32px));box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(8,14,24,.45)}
+.dlg{padding:22px;display:grid;gap:14px}
+.dlg h3{font-size:21px}
+.dlg input{border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--ground);font-family:var(--mono);font-size:18px;width:130px;letter-spacing:.3em}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:12px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:90;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80}
+
+.rv{transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.rv.pre{opacity:0;transform:translateY(26px)}
+
+/* maths */
+.maths-btn{align-self:flex-start;border-style:dashed;color:var(--ink-2);display:inline-flex;align-items:center;gap:8px}
+.maths-btn .mi{font-family:var(--display);font-style:italic;font-weight:700;font-size:16px;line-height:1;color:var(--acc)}
+.maths-btn[aria-expanded="true"]{border-style:solid;border-color:var(--acc);color:var(--ink)}
+.maths-panel{background:var(--surface-2);border-radius:14px;padding:16px;display:grid;gap:14px;justify-items:start;animation:pop .35s cubic-bezier(.2,.8,.2,1.2)}
+.maths-panel>p{font-size:15.5px;max-width:66ch}
+.maths-eq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 16px;display:grid;gap:14px;width:100%}
+.eq{font-family:var(--mono);font-size:16px;color:var(--ink);display:block;text-align:center;line-height:2.6}
+.eq .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 4px;line-height:1.25}
+.eq .fr>span:first-child{border-bottom:1.5px solid var(--ink);padding:0 6px 2px}
+.eq .fr>span:last-child{padding:2px 6px 0}
+.eq .op{color:var(--ink-2);margin:0 5px}
+.eq .sep{display:inline-block;width:30px}
+.eq .rad{border-top:1.5px solid var(--ink);padding:3px 5px 0;margin-left:-4px;display:inline-block;vertical-align:middle}
+.eq .st{display:inline-block;white-space:nowrap}
+.eq sub{font-size:.66em;vertical-align:sub}
+.eq sup{font-size:.66em;vertical-align:super}
+.eq-key{font-size:13.5px;color:var(--ink-2);display:grid;gap:6px}
+.eq-key b{color:var(--ink);font-family:var(--mono);font-weight:700}
+.maths-more{font-size:13.5px;padding:5px 11px}
+
+/* slider */
+.slider{display:grid;gap:6px}
+.slider .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;font-weight:700;font-size:15px}
+.slider output{font-family:var(--mono);font-size:18px;color:var(--acc)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:28px;background:transparent}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--acc) var(--p,50%),var(--surface-2) var(--p,50%))}
+input[type=range]::-moz-range-track{height:8px;border-radius:999px;background:var(--surface-2)}
+input[type=range]::-moz-range-progress{height:8px;border-radius:999px;background:var(--acc)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:var(--surface);border:3px solid var(--acc);margin-top:-8px;box-shadow:var(--shadow)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--surface);border:3px solid var(--acc)}
+
+@media (max-width:1080px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .notebook{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));top:auto;max-height:70vh;z-index:60;transform:translateY(calc(100% + 30px));transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  .notebook.open{transform:none}
+  .nb-toggle{display:inline-flex}
+  .nb-close{display:inline-flex}
+}
+@media (max-width:820px){
+  :root{--hdr:104px}
+  .hdr-in{height:auto;flex-wrap:wrap;padding-block:8px;gap:8px 12px}
+  .progress{order:3;flex-basis:100%}
+  .brand{flex:1;min-width:0;font-size:15px}
+  .stage-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .split,.split.wide{grid-template-columns:minmax(0,1fr)}
+  .lc-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fr-row{grid-template-columns:70px minmax(0,1fr);grid-template-areas:"id seq" "metric metric" "state state";gap:6px 10px}
+  .fr-row .rid{grid-area:id}.fr-row .rseq{grid-area:seq}.fr-row .rmetric{grid-area:metric}.fr-row .go{grid-area:state}
+  .step-head{grid-template-columns:1fr}
+  .hint-btn{grid-row:auto;grid-column:1;justify-self:start}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .rv.pre{opacity:1;transform:none}
+}
+@media print{
+  .hdr,.shell>aside,.toast,dialog,.confetti,.nb-toggle{display:none!important}
+  body{background:#fff}
+  main>section:not(#step-10){display:none!important}
+  #step-10{border:0;box-shadow:none}
+  .step-foot,.lock-veil{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-lock" viewBox="0 0 16 16"><path d="M4 7V5a4 4 0 0 1 8 0v2" fill="none" stroke="currentColor" stroke-width="2"/><rect x="2.5" y="7" width="11" height="8" rx="2" fill="currentColor"/></symbol>
+  <symbol id="i-check" viewBox="0 0 16 16"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<header class="hdr">
+  <div class="hdr-in">
+    <a class="brand" href="#mission"><span class="brand-mark" aria-hidden="true"></span>De Novo Bio-Design Studio</a>
+    <nav class="progress" id="progress" aria-label="Stages"></nav>
+    <div class="hdr-actions">
+      <button class="ghost nb-toggle" id="nbToggle" aria-controls="notebook" aria-expanded="false">Notebook <span class="num" id="nbToggleCount">0</span></button>
+      <button class="ghost" id="restart">Start over</button>
+    </div>
+  </div>
+  <div class="scrollbar" id="scrollbar" aria-hidden="true"></div>
+</header>
+
+<div class="shell">
+<main id="main">
+
+<!-- ============ MISSION ============ -->
+<section class="mission" id="mission" data-step="0">
+  <div class="m-top">
+    <span class="eyebrow">HKU iGEM · De novo design studio</span>
+    <h1 class="m-title">Design a protein that <em>switches off</em> inflammation.</h1>
+    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a receptor called <b>MD2</b>. If we can build a small protein that grabs MD2 and covers the right spot, the alarm never fires — and the wound gets a chance to heal.</p>
+    <p class="m-lede">No protein exists that does this. So we will <b>invent one</b>: pick the target surface, let generative AI sculpt a backbone, then push it through a four-stage filter until only the best candidate survives.</p>
+    <div class="m-meta">
+      <span><b>11 stages</b> · about 45 minutes</span>
+      <span><b>No coding</b> needed</span>
+      <span>Progress saves in this browser</span>
+    </div>
+  </div>
+
+  <div class="stage-strip">
+    <div class="stage-card s1"><span class="n">Stage 1 · Generate</span><h4>Target &amp; backbone</h4><p>Lock the hotspots, then let RFdiffusion and ProteinMPNN propose 10 sequences.</p></div>
+    <div class="stage-card s2"><span class="n">Stage 2 · Filter</span><h4>The funnel</h4><p>Four checks — fold, grip, safety, immune — narrow 10 candidates down to 2.</p></div>
+    <div class="stage-card s3"><span class="n">Stage 3 · Test</span><h4>Physics &amp; evolution</h4><p>Simulate body temperature, then mutate to strengthen the grip.</p></div>
+    <div class="stage-card s4"><span class="n">Stage 4 · Build</span><h4>DNA &amp; certification</h4><p>Turn the protein back into DNA and clear the safety check.</p></div>
+  </div>
+
+  <div class="hero-wrap">
+    <canvas id="heroCanvas" aria-label="Rotating MD2 receptor with a designed peptide docking onto it"></canvas>
+    <span class="hero-cap" id="heroCap">MD2 receptor · residues A17–A160</span>
+    <span class="hero-key">
+      <i><span class="dot" style="background:var(--dock)"></span>MD2 chain</i>
+      <i><span class="dot" style="background:var(--hot)"></span>hotspots A82 / A85</i>
+      <i><span class="dot" style="background:var(--acc)"></span>your binder</i>
+    </span>
+  </div>
+
+  <div class="mission-go rv">
+    <button class="btn acc big" id="startBtn">Enter the studio ↓</button>
+    <span class="kbd-hint">Everything you decide gets written into your Lab Notebook on the right.</span>
+  </div>
+</section>
+
+<!-- ============ STAGE 1.1 ============ -->
+<section class="step locked" id="step-1" data-step="1">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the mission to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 1.1 <span class="t">· target docking setup · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Find the spot on MD2 worth covering</h2>
+    <p class="lede">This is the real MD2 receptor, residues <b class="num">A17–A160</b>. Drag to spin it. Two residues — <b class="num">A82</b> and <b class="num">A85</b> — are the contact hotspots. Click both to lock them as your design target.</p>
+    <button class="ghost hint-btn" data-hint="1">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="split wide">
+      <div class="viewer canvas-box" style="height:min(430px,58vh)">
+        <canvas id="targetCanvas" aria-label="Rotatable 3D model of the MD2 receptor"></canvas>
+        <span class="canvas-hint">drag to rotate · click a red residue</span>
+      </div>
+      <div class="step-body">
+        <div class="panel" style="display:grid;gap:8px">
+          <span class="label">Design contig</span>
+          <div class="contig" id="contig">
+            <span class="seg">A17–A81</span><span class="sep">/</span>
+            <span class="seg hot" data-hot="82">A82 ?</span><span class="sep">/</span>
+            <span class="seg">A83–A84</span><span class="sep">/</span>
+            <span class="seg hot" data-hot="85">A85 ?</span><span class="sep">/</span>
+            <span class="seg">A86–A160</span>
+          </div>
+          <p class="kbd-hint">Everything outside the hotspots is scaffold — we design <i>against</i> it but never mutate it.</p>
+        </div>
+        <div id="s1say" aria-live="polite"></div>
+        <div class="panel" style="display:grid;gap:6px">
+          <span class="label">Why these two?</span>
+          <p style="font-size:15px;color:var(--ink-2)">A82 and A85 sit on the rim of the MD2 pocket. A binder that covers both physically blocks the alarm molecule from landing. Miss one and the alarm still fires.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="s1disc" hidden>
+      <span class="k">You just set the design brief</span>
+      <div class="rule"><span class="tile m">cover A82</span><span class="tile o">and</span><span class="tile m">cover A85</span><span class="tile o">— nothing else</span></div>
+      <p>A binder that covers more than the hotspots wastes surface it could use to grip tighter.</p>
+      <span class="sci"><span class="flask">Sc</span>The patch of surface a binder touches is the <b>epitope</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="2" hidden>Next: run the generative AI ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 1.2 ============ -->
+<section class="step locked" id="step-2" data-step="2">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Lock both hotspots to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 1.2 <span class="t">· AI backbone &amp; sequence design · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Let the generative AI propose 10 candidates</h2>
+    <p class="lede">Two models work as a team. <b>RFdiffusion (RFD3)</b> invents a 15-residue backbone that fits the hotspot. <b>ProteinMPNN</b> then decides which amino acid goes at each position. Then we check what came out.</p>
+    <button class="ghost hint-btn" data-hint="2">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="split wide">
+      <div class="step-body" style="gap:12px">
+        <div class="log" id="genLog"><span class="kbd-hint">Waiting for you to press the button. Nothing is downloaded — this is a simulation of a real run.</span></div>
+        <div class="progbar"><i id="genBar"></i></div>
+        <div class="row">
+          <button class="btn acc" id="genRun">Run generative AI ▸</button>
+          <button class="ghost" id="genReset" disabled>Reset</button>
+        </div>
+      </div>
+      <div class="step-body" style="gap:12px">
+        <div class="panel" style="display:grid;gap:8px">
+          <span class="label">What the models are actually doing</span>
+          <p style="font-size:15px;color:var(--ink-2)"><b>RFdiffusion</b> starts from random noise shaped like a protein and removes the noise step by step until a plausible backbone appears — the same idea as an image generator, in 3D.</p>
+          <p style="font-size:15px;color:var(--ink-2)"><b>ProteinMPNN</b> keeps that backbone fixed and solves a puzzle: which amino acid sequence would most likely fold into it?</p>
+        </div>
+        <div id="s2say" aria-live="polite"></div>
+      </div>
+    </div>
+    <div id="candWrap" hidden>
+      <p class="label" style="margin-bottom:10px">10 candidate designs</p>
+      <div class="cand-grid" id="candGrid"></div>
+      <div class="row" style="margin-top:14px;gap:16px;font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--ink-2)">
+        <span>pLDDT colour</span>
+        <span style="display:flex;gap:4px;align-items:center"><span class="dot" style="background:#0053D6"></span>&gt;90</span>
+        <span style="display:flex;gap:4px;align-items:center"><span class="dot" style="background:#65CBF3"></span>70–90</span>
+        <span style="display:flex;gap:4px;align-items:center"><span class="dot" style="background:#FFDB13"></span>50–70</span>
+        <span style="display:flex;gap:4px;align-items:center"><span class="dot" style="background:#FF7D45"></span>&lt;50</span>
+      </div>
+    </div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="s2disc" hidden>
+      <span class="k">10 designs, one file</span>
+      <div class="rule"><span class="tile">every candidate is 15 residues long</span></div>
+      <p>They all fit the hotspot. They do <i>not</i> all fold, grip, or stay quiet inside a human body. That is what the funnel is for.</p>
+      <span class="sci"><span class="flask">Sc</span>A short chain like this is a <b>peptide</b>; AI-designed binders are often called <b>de novo binders</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="3" hidden>Next: filter by fold quality ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 2.1 ============ -->
+<section class="step locked" id="step-3" data-step="3">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Generate candidates to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 2.1 <span class="t">· fold quality (pLDDT) · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Throw away anything that won't fold</h2>
+    <p class="lede">A designed sequence only works if it actually curls into a stable shape. AlphaFold gives every design a per-residue confidence called <b>pLDDT</b>, scored 0–100. <b>Keep anything at 70 or above. Discard the rest.</b></p>
+    <button class="ghost hint-btn" data-hint="3">Hint</button>
+  </header>
+  <div class="step-body">
+    <div id="f1say"></div>
+    <div class="funnel" id="f1"></div>
+    <div class="row"><button class="btn acc" id="f1check">Check my filter</button><span class="kbd-hint">Click a row to mark it for discarding.</span></div>
+    <div id="f1out" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="f1disc" hidden>
+      <span class="k">8 of 10 survived</span>
+      <div class="rule"><span class="tile l">pLDDT &lt; 70</span><span class="tile o">=</span><span class="tile">the model isn't sure the shape is real</span></div>
+      <p>Confidence is not the same as quality — but a design nobody can fold has no chance at all, and it is the cheapest thing to check first.</p>
+      <span class="sci"><span class="flask">Sc</span>Filtering cheapest-first is a <b>funnel</b>; each stage is a <b>selection criterion</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="4" hidden>Next: does it actually grip? ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 2.2 ============ -->
+<section class="step locked" id="step-4" data-step="4">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the fold check to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 2.2 <span class="t">· docking confidence (ipTM) · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Does it actually grip MD2?</h2>
+    <p class="lede">Boltz-1 folds the binder <i>together with</i> MD2 and reports <b>ipTM</b>, a 0–1 score for how confident it is about the interface. <b>Keep anything at 0.60 or above.</b></p>
+    <button class="ghost hint-btn" data-hint="4">Hint</button>
+  </header>
+  <div class="step-body">
+    <div id="f2say"></div>
+    <div class="funnel" id="f2"></div>
+    <div class="row"><button class="btn acc" id="f2check">Check my filter</button></div>
+    <div id="f2out" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="f2disc" hidden>
+      <span class="k">7 survived</span>
+      <div class="rule"><span class="tile l">ipTM &lt; 0.60</span><span class="tile o">=</span><span class="tile">the model can't commit to the interface</span></div>
+      <p>A binder that folds but doesn't hold on is just a floating peptide. It would drift away before it could block anything.</p>
+      <span class="sci"><span class="flask">Sc</span>When two molecules stick together they <b>co-fold</b>; the shape they make is a <b>complex</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="5" hidden>Next: is it safe? ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 2.3 ============ -->
+<section class="step locked" id="step-5" data-step="5">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the docking check to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 2.3 <span class="t">· off-target safety (MMseqs2) · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Could it grab the wrong protein?</h2>
+    <p class="lede">MMseqs2 compares every candidate against the entire human proteome. If a design looks like a piece of a real human protein, it might bind somewhere we never intended. <b>Discard any candidate with one or more off-target hits.</b></p>
+    <button class="ghost hint-btn" data-hint="5">Hint</button>
+  </header>
+  <div class="step-body">
+    <div id="f3say"></div>
+    <div class="funnel" id="f3"></div>
+    <div class="row"><button class="btn acc" id="f3check">Check my filter</button></div>
+    <div id="f3out" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="f3disc" hidden>
+      <span class="k">5 survived</span>
+      <div class="rule"><span class="tile l">off-target hit</span><span class="tile o">=</span><span class="tile">it resembles a human protein</span></div>
+      <p>This check costs almost nothing and runs in seconds. So it happens early — before anyone spends money on a real experiment.</p>
+      <span class="sci"><span class="flask">Sc</span>Accidental resemblance is <b>sequence homology</b>; avoiding it is <b>specificity</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="6" hidden>Next: will the body attack it? ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 2.4 ============ -->
+<section class="step locked" id="step-6" data-step="6">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the safety check to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 2.4 <span class="t">· immunogenicity (MHCflurry) · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Will the immune system attack your medicine?</h2>
+    <p class="lede">Our body displays fragments of every protein on <b>MHC</b> molecules so T-cells can inspect them. MHCflurry predicts which fragments get displayed. <b>Discard any candidate with one or more strong MHC binders</b> — those risk an immune reaction.</p>
+    <button class="ghost hint-btn" data-hint="6">Hint</button>
+  </header>
+  <div class="step-body">
+    <div id="f4say"></div>
+    <div class="funnel" id="f4"></div>
+    <div class="row"><button class="btn acc" id="f4check">Check my filter</button></div>
+    <div id="f4out" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="f4disc" hidden>
+      <span class="k">You are down to 2 leads</span>
+      <div class="rule"><span class="tile m">10</span><span class="tile o">→</span><span class="tile m">8</span><span class="tile o">→</span><span class="tile m">7</span><span class="tile o">→</span><span class="tile m">5</span><span class="tile o">→</span><span class="tile m">2</span></div>
+      <p>Same 10 designs, four very different questions. Each one removes a way the design could fail in a real patient.</p>
+      <span class="sci"><span class="flask">Sc</span>A sequence that provokes an immune response is <b>immunogenic</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="7" hidden>Next: test at body temperature ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 3.1 ============ -->
+<section class="step locked" id="step-7" data-step="7">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the immune filter to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 3.1 <span class="t">· 37 °C water box simulation · 10 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Does it survive a real body?</h2>
+    <p class="lede">Two candidates left. Put both in a simulated water box at <b>37 °C</b> and shake them the way a real body would. We watch <b>RMSD</b> — how far the structure drifts from where it started. Under <b>2 Å</b> means it holds.</p>
+    <button class="ghost hint-btn" data-hint="7">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="canvas-box" style="height:280px"><canvas id="mdChart" aria-label="RMSD over 20 nanoseconds for both lead candidates"></canvas></div>
+    <div class="row"><button class="btn acc" id="mdRun">Run 20 ns simulation ▸</button><span class="kbd-hint" id="mdClock">0.0 ns</span></div>
+    <div class="split">
+      <div class="panel" id="mdCardA" style="display:grid;gap:8px">
+        <div class="row" style="justify-content:space-between"><b class="num">MD2B-01</b><span class="num" id="mdRmsdA">—</span></div>
+        <div class="canvas-box" style="height:96px;background:transparent;border:0"><canvas id="mdSceneA" aria-label="Complex A"></canvas></div>
+        <p style="font-size:14px;color:var(--ink-2)" id="mdVerdA">Not tested yet.</p>
+      </div>
+      <div class="panel" id="mdCardB" style="display:grid;gap:8px">
+        <div class="row" style="justify-content:space-between"><b class="num">MD2B-10</b><span class="num" id="mdRmsdB">—</span></div>
+        <div class="canvas-box" style="height:96px;background:transparent;border:0"><canvas id="mdSceneB" aria-label="Complex B"></canvas></div>
+        <p style="font-size:14px;color:var(--ink-2)" id="mdVerdB">Not tested yet.</p>
+      </div>
+    </div>
+    <div id="mdAsk" hidden>
+      <p class="label">Which one do you take forward?</p>
+      <div class="choices" id="mdPick" style="margin-top:8px">
+        <button class="choice" data-v="MD2B-01">MD2B-01</button>
+        <button class="choice" data-v="MD2B-10">MD2B-10</button>
+      </div>
+    </div>
+    <div id="mdSay" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="mddisc" hidden>
+      <span class="k">Only one survives the water box</span>
+      <div class="rule"><span class="tile l">RMSD &gt; 2 Å</span><span class="tile o">=</span><span class="tile">the binder unfolds and lets go</span></div>
+      <p>Both passed four computational filters. Neither of those filters simulated motion. A structure is a photograph; a simulation is a movie.</p>
+      <span class="sci"><span class="flask">Sc</span>Shaking a molecule with physics for a while is <b>molecular dynamics</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="8" hidden>Next: evolve it ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 3.2 ============ -->
+<section class="step locked" id="step-8" data-step="8">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the MD simulation to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 3.2 <span class="t">· in silico point evolution · 10 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Make the grip stronger</h2>
+    <p class="lede">Our winner holds on, but weakly. Binding free energy <b>ΔG</b> is currently <b class="num" id="dgStart">−6.6</b> kcal/mol. We need <b>≤ −8.0</b>. Click a residue to try a mutation. Five positions are locked — they touch the hotspots.</p>
+    <button class="ghost hint-btn" data-hint="8">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="panel" style="display:grid;gap:12px">
+      <div class="row" style="justify-content:space-between;align-items:baseline">
+        <span class="label">Candidate <span class="num" id="evoId">MD2B-10</span></span>
+        <span class="num" style="font-size:19px;font-weight:700" id="dgVal">−6.6 kcal/mol</span>
+      </div>
+      <div class="gauge"><i id="dgBar" style="width:35%"></i><span class="mark" style="left:60%"></span></div>
+      <div class="row" style="justify-content:space-between;font-family:var(--mono);font-size:11.5px;color:var(--ink-2);font-weight:700">
+        <span>−6.0 weak</span><span>−8.0 target</span><span>−10.0 very strong</span>
+      </div>
+      <div class="seq-strip" id="seqStrip"></div>
+      <div id="mutPanel"></div>
+      <div class="row">
+        <button class="btn soft" id="ucbBtn">Ask UCB: which mutation next?</button>
+        <button class="ghost" id="mutUndo">Undo last</button>
+        <button class="ghost" id="mutReset">Reset sequence</button>
+      </div>
+    </div>
+    <div id="evoLog" aria-live="polite"></div>
+    <div class="panel" id="ucbPanel" hidden style="display:grid;gap:8px">
+      <span class="label">How UCB chose that</span>
+      <p style="font-size:15px;color:var(--ink-2)">Upper Confidence Bound scores every position as <b class="num">μ + c √(ln N / n)</b> — how good it <i>looks</i> so far (μ), plus a bonus for being under-explored (the square-root term). Then it picks the highest score. That is how you balance trying new things against using what already works.</p>
+      <div class="num" id="ucbTable" style="font-size:13px;color:var(--ink-2)"></div>
+    </div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="evodisc" hidden>
+      <span class="k">Strong enough to build</span>
+      <div class="rule"><span class="tile m">ΔG ≤ −8.0</span><span class="tile o">=</span><span class="tile">worth synthesising</span></div>
+      <p>Every mutation we tried was tested by a model, not a pipette. A wet lab would take weeks to test this many variants — the model narrows thousands of options down to a handful worth testing for real.</p>
+      <span class="sci"><span class="flask">Sc</span>Searching a space by balancing exploration and exploitation is <b>Bayesian optimisation</b></span>
+    </div>
+    <button class="btn acc next-btn" data-next="9" hidden>Next: turn it into DNA ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 4.1 ============ -->
+<section class="step locked" id="step-9" data-step="9">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Finish the evolution stage to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 4.1 <span class="t">· code-to-DNA reverse translation · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Write the gene</h2>
+    <p class="lede">Proteins are built from DNA, three letters at a time. Most amino acids have several possible triplets — but <i>E. coli</i> reads some of them much faster than others. For each residue below, pick the triplet the cell prefers.</p>
+    <button class="ghost hint-btn" data-hint="9">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="panel" style="display:grid;gap:10px">
+      <span class="label">Winning peptide</span>
+      <div class="seq-strip" id="winSeq"></div>
+    </div>
+    <div class="panel" style="display:grid;gap:0">
+      <span class="label" style="margin-bottom:6px">Reverse translate</span>
+      <div id="codonRows"></div>
+    </div>
+    <div id="codonSay" aria-live="polite"></div>
+    <div id="geneWrap" hidden style="display:grid;gap:10px">
+      <span class="label">Full gene · 5′ → 3′</span>
+      <div class="gene" id="geneOut"></div>
+      <div class="row">
+        <span class="sci"><span class="flask">Sc</span><b>ATG</b> starts the gene, <b>TAA</b> stops it</span>
+        <span class="sci"><span class="flask">Sc</span>Choosing the fast codons is <b>codon optimisation</b></span>
+      </div>
+    </div>
+  </div>
+  <div class="step-foot">
+    <div class="discover" id="codondisc" hidden>
+      <span class="k">Same protein, many possible genes</span>
+      <div class="rule"><span class="tile m">4³ = 64</span><span class="tile o">codons for</span><span class="tile m">20</span><span class="tile o">amino acids</span></div>
+      <p>The genetic code is redundant: 64 three-letter words spell only 20 amino acids. That redundancy is free room for optimisation — same medicine, easier to manufacture.</p>
+    </div>
+    <button class="btn acc next-btn" data-next="10" hidden>Next: safety check &amp; certificate ↓</button>
+  </div>
+</section>
+
+<!-- ============ STAGE 4.2 ============ -->
+<section class="step locked" id="step-10" data-step="10">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Build the gene to unlock</span>
+  <header class="step-head">
+    <span class="step-no">Stage 4.2 <span class="t">· lab compliance &amp; certification · 5 min</span> <span class="step-done-pill">Done</span></span>
+    <h2>Clear the safety check</h2>
+    <p class="lede">Before any DNA is ordered, three questions. Get all three and your certificate unlocks.</p>
+    <button class="ghost hint-btn" data-hint="10">Hint</button>
+  </header>
+  <div class="step-body">
+    <div class="quiz" id="quiz"></div>
+    <div id="quizSay" aria-live="polite"></div>
+  </div>
+  <div class="step-foot">
+    <button class="btn acc next-btn" data-next="11" hidden>See your certificate ↓</button>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATE ============ -->
+<section class="labcard step locked" id="step-11" data-step="11" style="padding:0">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Pass the safety quiz to unlock</span>
+  <div class="lc-head">
+    <div style="display:grid;gap:6px">
+      <span class="eyebrow">De Novo Bio-Design Studio · Certificate of Completion</span>
+      <h2>AI Bio-Engineer</h2>
+    </div>
+    <button class="ghost" id="certPrint" style="background:transparent;color:var(--ground);border-color:color-mix(in oklab,var(--ground) 40%,transparent)">Print / save PDF</button>
+  </div>
+  <div class="lc-body step-body">
+    <div class="row" style="gap:12px;align-items:flex-end">
+      <label style="display:grid;gap:4px"><span class="label">Your name</span>
+        <input id="certName" placeholder="Type your name" style="border:1.5px solid var(--line);border-radius:10px;padding:9px 12px;background:var(--ground);font-weight:700;min-width:230px">
+      </label>
+      <span class="kbd-hint" id="certDate"></span>
+    </div>
+    <div class="lc-grid">
+      <div class="lc-field"><span class="label">Candidate</span><span class="v num" id="lcId">—</span></div>
+      <div class="lc-field"><span class="label">Fold confidence · pLDDT</span><span class="v num" id="lcPlddt">—</span></div>
+      <div class="lc-field"><span class="label">Interface confidence · ipTM</span><span class="v num" id="lcIptm">—</span></div>
+      <div class="lc-field"><span class="label">Binding energy · ΔG</span><span class="v num" id="lcDg">—</span></div>
+    </div>
+    <div class="rv" style="display:grid;gap:6px">
+      <span class="label">Designed peptide sequence</span>
+      <div class="gene" style="font-size:16px;letter-spacing:.22em" id="lcSeq">—</div>
+    </div>
+    <div class="rv" style="display:grid;gap:6px">
+      <span class="label">Synthesised gene</span>
+      <div class="gene" style="font-size:12.5px;line-height:1.9" id="lcGene">—</div>
+    </div>
+    <div class="rv"><p class="label">What we learned</p>
+      <ul class="lc-list" id="lcRules" style="margin-top:8px"></ul>
+    </div>
+    <div class="rv panel"><p class="label">Next experiment</p>
+      <p style="margin-top:6px"><b>Order the top three designs</b>, not just the winner, and measure how tightly each one actually grips MD2 in the lab. Does the model's ranking hold up?</p>
+    </div>
+    <div class="rv row"><button class="btn acc" id="openStudioBtn">Open Studio: change every threshold ↓</button></div>
+  </div>
+</section>
+
+<!-- ============ OPEN STUDIO ============ -->
+<section class="step locked" id="step-12" data-step="12">
+  <span class="lock-veil"><svg><use href="#i-lock"/></svg>Unlocks after the certificate</span>
+  <header class="step-head">
+    <span class="step-no">Open Studio <span class="t">· bonus</span></span>
+    <h2>What if our cut-offs were different?</h2>
+    <p class="lede">Every filter you used was a number somebody chose. Move them and watch the funnel change. This is how you find out which decision actually mattered.</p>
+  </header>
+  <div class="step-body">
+    <div class="split wide">
+      <div class="step-body" style="gap:14px" id="studioSliders"></div>
+      <div class="step-body" style="gap:14px">
+        <div class="canvas-box" style="height:280px"><canvas id="studioCanvas" aria-label="Funnel survival for each filter setting"></canvas></div>
+        <div id="studioSay" aria-live="polite"></div>
+        <div class="row"><button class="ghost" id="studioReset">Reset to the workshop settings</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<aside class="notebook" id="notebook" aria-label="Lab notebook">
+  <div class="nb-head"><h3>Lab notebook</h3><span class="nb-count" id="nbCount">0 entries</span><button class="ghost nb-close" id="nbClose" aria-label="Close notebook">Close</button></div>
+  <div class="nb-sec"><span class="label">Things we decided</span><ul id="nbAssume"><li class="empty">Lock the hotspots in Stage 1.1</li></ul></div>
+  <div class="nb-sec"><span class="label">Values found</span><ul id="nbValues"><li class="empty">Nothing measured yet</li></ul></div>
+  <div class="nb-sec"><span class="label">Words scientists use</span><div class="nb-badges" id="nbBadges"><span class="kbd-hint">Collect them as you go</span></div></div>
+</aside>
+</div>
+
+<dialog id="hintDlg">
+  <form method="dialog" class="dlg">
+    <h3 id="hintTitle">Hint</h3>
+    <p id="hintText"></p>
+    <details>
+      <summary class="kbd-hint">Helper code</summary>
+      <div class="row" style="margin-top:10px">
+        <label class="sr" for="helperCode">Helper code</label>
+        <input id="helperCode" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="····">
+        <button class="btn soft" type="button" id="helperGo">Unlock</button>
+      </div>
+      <p class="kbd-hint" id="helperMsg" style="margin-top:6px">For workshop helpers: unlocks and completes this stage.</p>
+    </details>
+    <div class="row" style="justify-content:flex-end"><button class="btn">Got it</button></div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+
+<script>
+"use strict";
+/* ============================================================
+   0 · small utilities
+   ============================================================ */
+const $  = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const STORE_KEY = "denovoStudio.v1";
+const HELPER_CODE = "2026";
+const wait = ms => new Promise(r => setTimeout(r, REDUCED ? Math.min(ms, 60) : ms));
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const fmt = (v, d = 1) => {
+  if (v == null || !isFinite(v)) return "—";
+  const r = Math.round(v * 10 ** d) / 10 ** d;
+  return Math.abs(r - Math.round(r)) < 1e-9 ? String(Math.round(r)) : r.toFixed(d);
+};
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function rr(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h);
+}
+const esc = s => String(s).replace(/[<>&]/g, c => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;" }[c]));
+
+/* ============================================================
+   1 · theme tokens
+   ============================================================ */
+const C = {};
+function relLum(c) {
+  const m = /#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i.exec(c);
+  const p = m ? [1, 2, 3].map(i => parseInt(m[i], 16)) : null;
+  if (!p || p.some(isNaN)) return .5;
+  const f = v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); };
+  return .2126 * f(p[0]) + .7152 * f(p[1]) + .0722 * f(p[2]);
+}
+function readTokens() {
+  const cs = getComputedStyle(document.documentElement);
+  ["ground", "surface", "surface-2", "ink", "ink-2", "line", "acc", "acc-soft", "acc-ink",
+   "dock", "dock-soft", "hot", "hot-soft", "warn", "warn-soft", "ok", "ok-soft", "chain", "focus"]
+    .forEach(k => C[k] = cs.getPropertyValue("--" + k).trim() || "#888");
+  C.mono = cs.getPropertyValue("--mono").trim();
+  C.dark = relLum(C.ground) < relLum(C.ink);
+}
+readTokens();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", readTokens);
+new MutationObserver(readTokens).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+/* ============================================================
+   2 · state
+   ============================================================ */
+const blank = () => ({
+  v: 1, done: {}, decide: [], values: {}, badges: [],
+  data: {}
+});
+let S = blank();
+function load() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (raw) { const o = JSON.parse(raw); if (o && o.v === 1) S = Object.assign(blank(), o); }
+  } catch (e) { /* ignore */ }
+}
+function save() { try { localStorage.setItem(STORE_KEY, JSON.stringify(S)); } catch (e) { /* ignore */ } }
+
+/* ============================================================
+   3 · notebook
+   ============================================================ */
+function note(text) { if (!S.decide.includes(text)) { S.decide.push(text); save(); renderNotebook(text); } }
+function value(key, label, val) { S.values[key] = { label, val }; save(); renderNotebook(key); }
+function badge(word) { if (!S.badges.includes(word)) { S.badges.push(word); save(); renderNotebook(word); } }
+function renderNotebook(fresh) {
+  const ua = $("#nbAssume"), uv = $("#nbValues"), ub = $("#nbBadges");
+  ua.innerHTML = S.decide.length
+    ? S.decide.map(a => `<li class="${a === fresh ? "fresh" : ""}">${a}</li>`).join("")
+    : `<li class="empty">Lock the hotspots in Stage 1.1</li>`;
+  const vals = Object.entries(S.values);
+  uv.innerHTML = vals.length
+    ? vals.map(([k, o]) => `<li class="nb-val ${k === fresh ? "fresh" : ""}"><span>${o.label}</span><b>${o.val}</b></li>`).join("")
+    : `<li class="empty">Nothing measured yet</li>`;
+  ub.innerHTML = S.badges.length
+    ? S.badges.map(b => `<span class="nb-badge">${b}</span>`).join("")
+    : `<span class="kbd-hint">Collect them as you go</span>`;
+  const n = S.decide.length + vals.length + S.badges.length;
+  $("#nbCount").textContent = n + (n === 1 ? " entry" : " entries");
+  $("#nbToggleCount").textContent = n;
+}
+$("#nbToggle").addEventListener("click", () => {
+  const nb = $("#notebook"), o = nb.classList.toggle("open");
+  $("#nbToggle").setAttribute("aria-expanded", o);
+});
+$("#nbClose").addEventListener("click", () => { $("#notebook").classList.remove("open"); $("#nbToggle").setAttribute("aria-expanded", "false"); });
+
+/* ============================================================
+   4 · canvas scene engine
+   ============================================================ */
+const scenes = [];
+class Scene {
+  constructor(canvas, draw) {
+    this.c = canvas; this.ctx = canvas.getContext("2d"); this.draw = draw;
+    this.visible = false; this.t = 0;
+    scenes.push(this); Scene.ro.observe(canvas); Scene.io.observe(canvas);
+    this.resize();
+  }
+  resize() {
+    const r = this.c.getBoundingClientRect();
+    const d = Math.min(devicePixelRatio || 1, 2);
+    this.w = Math.max(1, r.width); this.h = Math.max(1, r.height);
+    this.c.width = Math.round(this.w * d); this.c.height = Math.round(this.h * d);
+    this.ctx.setTransform(d, 0, 0, d, 0, 0);
+    this.render(0);
+  }
+  render(dt) { this.t += dt; this.ctx.clearRect(0, 0, this.w, this.h); this.draw(this.ctx, this.w, this.h, dt, this.t); }
+}
+Scene.ro = new ResizeObserver(es => es.forEach(en => scenes.find(s => s.c === en.target)?.resize()));
+Scene.io = new IntersectionObserver(es => es.forEach(en => {
+  const s = scenes.find(x => x.c === en.target); if (s) s.visible = en.isIntersecting;
+}));
+let lastT = 0, rafId = 0;
+function loop(ts) {
+  const dt = Math.min(0.05, (ts - lastT) / 1000 || 0); lastT = ts;
+  for (const s of scenes) if (s.visible) s.render(dt);
+  rafId = requestAnimationFrame(loop);
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) cancelAnimationFrame(rafId);
+  else { lastT = performance.now(); rafId = requestAnimationFrame(loop); }
+});
+
+/* ============================================================
+   5 · the MD2 receptor model (procedural β-cup)
+   ============================================================ */
+function buildMD2() {
+  const rand = mulberry32(8817);
+  const pts = [];
+  const NSTR = 8, PER = 14, LOOP = 4, R = 15, H = 31;
+  const ang = s => (s - 4) * (Math.PI * 2 / NSTR);
+  for (let s = 0; s < NSTR; s++) {
+    const a0 = ang(s);
+    for (let k = 0; k < PER; k++) {
+      const t = k / (PER - 1);
+      const y = -H / 2 + H * t;
+      const a = a0 + Math.sin(t * Math.PI * 1.6 + s * 0.7) * 0.13;
+      const rad = R + (k % 2 ? -3.4 : 3.4) + (rand() - .5) * .5;
+      pts.push({ x: rad * Math.sin(a), y: y + (rand() - .5) * .4, z: rad * Math.cos(a) });
+    }
+    if (s < NSTR - 1) {
+      const a1 = ang(s + 1);
+      for (let k = 1; k <= LOOP; k++) {
+        const t = k / (LOOP + 1);
+        const a = a0 + (a1 - a0) * t;
+        const y = H / 2 + 4.5 * Math.sin(Math.PI * t);
+        pts.push({ x: (R - .5) * Math.sin(a), y, z: (R - .5) * Math.cos(a) });
+      }
+    }
+  }
+  return pts;
+}
+const MD2 = buildMD2();
+const resIndex = res => Math.round((res - 17) / (160 - 17) * (MD2.length - 1));
+const HOT = [
+  { res: 82, i: resIndex(82) },
+  { res: 85, i: resIndex(85) }
+];
+
+function project3(p, rot, scale, cx, cy, focal) {
+  const cyw = Math.cos(rot.yaw), syw = Math.sin(rot.yaw);
+  const cpi = Math.cos(rot.pitch), spi = Math.sin(rot.pitch);
+  const x1 = p.x * cyw + p.z * syw;
+  const z1 = -p.x * syw + p.z * cyw;
+  const y1 = p.y * cpi - z1 * spi;
+  const z2 = p.y * spi + z1 * cpi;
+  const s = focal / (focal + z2);
+  return { x: cx + x1 * scale * s, y: cy - y1 * scale * s, z: z2, s };
+}
+const PLDDT_COLOR = v => v >= 90 ? "#0053D6" : v >= 70 ? "#65CBF3" : v >= 50 ? "#FFDB13" : "#FF7D45";
+
+function renderProtein(ctx, w, h, o) {
+  const pts = o.pts, rot = o.rot;
+  const scale = o.scale ?? Math.min(w, h) / 62;
+  const cx = o.cx ?? w / 2, cy = o.cy ?? h / 2, focal = o.focal ?? 300;
+  const P = pts.map(p => project3(p, rot, scale, cx, cy, focal));
+  let zmin = 1e9, zmax = -1e9;
+  for (const p of P) { if (p.z < zmin) zmin = p.z; if (p.z > zmax) zmax = p.z; }
+  const span = Math.max(1e-6, zmax - zmin);
+  const fog = z => 1 - 0.6 * ((z - zmin) / span);
+  const order = P.map((_, i) => i).sort((a, b) => P[b].z - P[a].z);
+
+  // backbone ribbon
+  for (const i of order) {
+    if (i + 1 >= P.length) continue;
+    const a = P[i], b = P[i + 1];
+    ctx.globalAlpha = 0.5 * fog((a.z + b.z) / 2);
+    ctx.strokeStyle = o.chainColor || C.chain;
+    ctx.lineWidth = Math.max(1.2, 2.4 * scale / 5 * (a.s + b.s) / 2);
+    ctx.lineCap = "round";
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // beads
+  const rBase = (o.rBase ?? 1.75) * scale;
+  for (const i of order) {
+    const p = P[i];
+    const r = rBase * p.s;
+    const col = o.colorOf ? o.colorOf(i) : C.dock;
+    ctx.globalAlpha = 0.35 + 0.65 * fog(p.z);
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.283); ctx.fill();
+    ctx.globalAlpha = 0.35 * fog(p.z);
+    ctx.fillStyle = "#fff";
+    ctx.beginPath(); ctx.arc(p.x - r * .28, p.y - r * .3, r * .34, 0, 6.283); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  // hotspots
+  const hotPts = [];
+  if (o.hot) {
+    for (const hspot of o.hot) {
+      const p = P[hspot.i];
+      if (!p) continue;
+      hotPts.push({ ...p, ...hspot });
+      const r = rBase * p.s * 1.5;
+      const pulse = hspot.on ? 0 : (0.5 + 0.5 * Math.sin((o.t || 0) * 3));
+      const col = hspot.on ? C.ok : C.hot;
+      ctx.globalAlpha = 0.28 * (hspot.on ? 1 : pulse) * fog(p.z);
+      const g = ctx.createRadialGradient(p.x, p.y, r * .5, p.x, p.y, r * 3.4);
+      g.addColorStop(0, col); g.addColorStop(1, "transparent");
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r * 3.4, 0, 6.283); ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = col;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.283); ctx.fill();
+      ctx.strokeStyle = C.surface; ctx.lineWidth = 2 * p.s;
+      ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 6.283); ctx.stroke();
+      if (!hspot.on) {
+        ctx.strokeStyle = col; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.arc(p.x, p.y, r + 6 + pulse * 4, 0, 6.283); ctx.stroke();
+      }
+      ctx.font = `700 ${Math.round(11 * clamp(p.s, .8, 1.3))}px ${C.mono}`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillStyle = C.surface;
+      ctx.fillText("A" + hspot.res, p.x, p.y + .5);
+    }
+  }
+  ctx.textBaseline = "alphabetic"; ctx.textAlign = "left";
+  return { P, hotPts };
+}
+
+/* small helper: draw a bead */
+function bead(ctx, x, y, r, color, alpha = 1) {
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.beginPath(); ctx.arc(x, y, r, 0, 6.283); ctx.fill();
+  ctx.globalAlpha = alpha * .35;
+  ctx.fillStyle = "#fff";
+  ctx.beginPath(); ctx.arc(x - r * .3, y - r * .32, r * .34, 0, 6.283); ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+/* ============================================================
+   6 · candidate data
+   ============================================================ */
+const CANDS = [
+  { id: "MD2B-01", seq: "MSVQELLAELAGLKT", plddt: 92.4, iptm: 0.84, off: 0, mhc: 0, stable: false },
+  { id: "MD2B-02", seq: "GTVKELLRELAGLKS", plddt: 88.1, iptm: 0.78, off: 0, mhc: 3 },
+  { id: "MD2B-03", seq: "MTVQKLLDELAGLKA", plddt: 64.3, iptm: 0.61, off: 0, mhc: 0 },
+  { id: "MD2B-04", seq: "MSVEELLKELAGLRT", plddt: 79.6, iptm: 0.52, off: 1, mhc: 1 },
+  { id: "MD2B-05", seq: "GSVQDLLKELAGLKS", plddt: 85.2, iptm: 0.72, off: 2, mhc: 0 },
+  { id: "MD2B-06", seq: "MTVQELLKELAGLKT", plddt: 90.7, iptm: 0.88, off: 0, mhc: 2 },
+  { id: "MD2B-07", seq: "MSVQELLAELAGLKA", plddt: 76.9, iptm: 0.66, off: 0, mhc: 1 },
+  { id: "MD2B-08", seq: "GTVQELLKELAGLKT", plddt: 58.2, iptm: 0.47, off: 3, mhc: 1 },
+  { id: "MD2B-09", seq: "MSVKELLDELAGLKS", plddt: 83.4, iptm: 0.69, off: 1, mhc: 0 },
+  { id: "MD2B-10", seq: "MTVQELLRELAGLKT", plddt: 94.1, iptm: 0.91, off: 0, mhc: 0, stable: true }
+];
+const RULES = {
+  3: { label: "pLDDT", pass: c => c.plddt >= 70 },
+  4: { label: "ipTM",   pass: c => c.iptm >= 0.60 },
+  5: { label: "off-target", pass: c => c.off === 0 },
+  6: { label: "MHC",    pass: c => c.mhc === 0 }
+};
+const survivorsAfter = upTo => CANDS.filter(c => {
+  for (let k = 3; k <= upTo; k++) if (!RULES[k].pass(c)) return false;
+  return true;
+});
+
+/* ============================================================
+   7 · steps registry
+   ============================================================ */
+const Steps = {};
+const LABELS = ["Go", "1.1", "1.2", "2.1", "2.2", "2.3", "2.4", "3.1", "3.2", "4.1", "4.2", "Cert", "Studio"];
+const NAMES = ["Mission", "Target setup", "Generation", "Fold quality", "Docking", "Off-target", "Immunogenicity",
+               "MD stability", "Evolution", "Reverse translation", "Certification", "Certificate", "Open Studio"];
+const section = n => document.querySelector(`[data-step="${n}"]`);
+const unlocked = n => n === 0 || !!S.done[n - 1];
+
+function buildProgress() {
+  const nav = $("#progress");
+  nav.innerHTML = LABELS.map((l, i) => `<button class="pchip" data-go="${i}" aria-label="${NAMES[i]}">${l}</button>`).join("");
+  nav.addEventListener("click", e => {
+    const b = e.target.closest(".pchip"); if (!b) return;
+    const n = +b.dataset.go;
+    if (!unlocked(n)) { toast(`Finish ${NAMES[n - 1]} first`); return; }
+    goTo(n);
+  });
+}
+function applyLocks() {
+  for (let n = 0; n <= 12; n++) {
+    const sec = section(n); if (!sec) continue;
+    const lock = !unlocked(n);
+    sec.classList.toggle("locked", lock);
+    sec.classList.toggle("done", !!S.done[n]);
+    $$(":scope > .step-body, :scope > .step-foot, :scope > .step-head .hint-btn", sec)
+      .forEach(el => { el.inert = lock; });
+    const nb = $(":scope .next-btn", sec); if (nb) nb.hidden = !S.done[n];
+    const chip = $(`.pchip[data-go="${n}"]`);
+    if (!chip) continue;
+    chip.classList.toggle("done", !!S.done[n]);
+    chip.setAttribute("aria-disabled", lock ? "true" : "false");
+    chip.innerHTML = lock
+      ? `<svg aria-hidden="true"><use href="#i-lock"/></svg>${LABELS[n]}`
+      : (S.done[n] && n > 0 && n < 12 ? `<svg aria-hidden="true"><use href="#i-check"/></svg>${LABELS[n]}` : LABELS[n]);
+  }
+}
+function complete(n) {
+  if (S.done[n]) return;
+  S.done[n] = true; save(); applyLocks();
+  const nx = section(n + 1);
+  if (nx) {
+    nx.classList.remove("unlocking"); void nx.offsetWidth; nx.classList.add("unlocking");
+    if (n > 0) toast(n === 10 ? "Certificate unlocked" : n === 11 ? "Open Studio unlocked" : `Stage ${LABELS[n + 1]} unlocked`);
+    Steps[n + 1]?.onUnlock?.();
+  }
+}
+function goTo(n) {
+  const sec = section(n); if (!sec) return;
+  sec.scrollIntoView({ behavior: REDUCED ? "auto" : "smooth", block: "start" });
+  const h = $("h1, h2", sec);
+  if (h) { h.tabIndex = -1; setTimeout(() => h.focus({ preventScroll: true }), REDUCED ? 0 : 600); }
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest(".next-btn");
+  if (b) goTo(+b.dataset.next);
+});
+
+/* say / toast / press */
+const ICON = { good: "✓", warn: "?", bad: "!", info: "i" };
+function say(el, kind, html) {
+  if (typeof el === "string") el = $(el);
+  if (!el) return;
+  el.innerHTML = `<div class="say ${kind}"><span class="ic" aria-hidden="true">${ICON[kind] || "i"}</span><span>${html}</span></div>`;
+}
+let toastT;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove("show"), 2600);
+}
+function press(group, btn) {
+  $$("button", group).forEach(b => b.setAttribute("aria-pressed", b === btn ? "true" : "false"));
+}
+function setRangeFill(inp) {
+  const p = (inp.value - inp.min) / (inp.max - inp.min) * 100;
+  inp.style.setProperty("--p", p + "%");
+}
+document.addEventListener("input", e => { if (e.target.type === "range") setRangeFill(e.target); });
+
+/* ============================================================
+   8 · hint dialog
+   ============================================================ */
+const HINTS = {
+  1: "Drag the model until you can see the two red residues. Click each one. If they hide behind the structure, keep rotating.",
+  2: "You don't have to type anything. Just press Run generative AI and watch the log.",
+  3: "The cut-off is 70. Sort by reading the number: anything below 70 is discarded, anything 70 or above stays.",
+  4: "The cut-off is 0.60. Everything in this list already passed the fold check, so some of them may still fail here.",
+  5: "Even one off-target hit is a problem. Look at the number in the middle column.",
+  6: "One strong MHC binder is enough to flag a candidate. This is the strictest filter in the funnel.",
+  7: "Watch the two curves. One levels off below 2 Å. The other keeps climbing — that binder is coming apart.",
+  8: "Press 'Ask UCB' to get a suggestion. Some positions give a bigger improvement than others — try a few and keep the best three.",
+  9: "Both triplets code for the same amino acid. The difference is speed: E. coli has far more tRNA for the first one.",
+  10: "All three answers follow the same principle: check before you build, and contain what you build.",
+};
+let hintStep = 1;
+document.addEventListener("click", e => {
+  const b = e.target.closest(".hint-btn"); if (!b) return;
+  hintStep = +b.dataset.hint;
+  $("#hintTitle").textContent = `Hint · ${LABELS[hintStep] ?? hintStep}`;
+  $("#hintText").textContent = HINTS[hintStep] || "Try the step again.";
+  $("#helperCode").value = "";
+  $("#helperMsg").textContent = "For workshop helpers: unlocks and completes this stage.";
+  const d = $("#hintDlg");
+  d.showModal ? d.showModal() : d.setAttribute("open", "");
+});
+$("#helperGo").addEventListener("click", () => {
+  if ($("#helperCode").value.trim() !== HELPER_CODE) {
+    $("#helperMsg").textContent = "That code didn't work. Check with the workshop leader."; return;
+  }
+  for (let n = 0; n <= hintStep; n++) if (!S.done[n]) { Steps[n]?.restore?.(); complete(n); }
+  $("#hintDlg").close?.();
+  toast(`Stage ${LABELS[hintStep] ?? hintStep} completed by a helper`);
+});
+
+let restartArmed = 0;
+$("#restart").addEventListener("click", () => {
+  const b = $("#restart");
+  if (Date.now() - restartArmed > 3000) {
+    restartArmed = Date.now(); b.textContent = "Tap again to clear";
+    setTimeout(() => b.textContent = "Start over", 3000); return;
+  }
+  try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignore */ }
+  scrollTo(0, 0); location.reload();
+});
+
+/* ============================================================
+   9 · confetti
+   ============================================================ */
+function confetti() {
+  if (REDUCED) return;
+  const cv = $("#confetti"), ctx = cv.getContext("2d"), d = Math.min(devicePixelRatio || 1, 2);
+  cv.width = innerWidth * d; cv.height = innerHeight * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+  const cols = [C.acc, C.dock, C.ok, C.warn, C.hot];
+  const ps = Array.from({ length: 90 }, () => ({
+    x: innerWidth / 2, y: innerHeight * .45,
+    vx: (Math.random() - .5) * 700, vy: -Math.random() * 600 - 150,
+    r: Math.random() * 6 + 3, c: cols[Math.random() * 5 | 0], a: Math.random() * 6
+  }));
+  const t0 = performance.now(); let prev = t0;
+  (function f(now) {
+    const dt = (now - prev) / 1000; prev = now;
+    ctx.clearRect(0, 0, innerWidth, innerHeight);
+    ps.forEach(p => {
+      p.vy += 900 * dt; p.x += p.vx * dt; p.y += p.vy * dt; p.a += dt * 6;
+      ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a); ctx.fillStyle = p.c;
+      ctx.fillRect(-p.r / 2, -p.r / 4, p.r, p.r / 2); ctx.restore();
+    });
+    if (now - t0 < 2600) requestAnimationFrame(f);
+    else ctx.clearRect(0, 0, innerWidth, innerHeight);
+  })(t0);
+}
+
+/* ============================================================
+   10 · MISSION
+   ============================================================ */
+Steps[0] = {
+  init() {
+    const rot = { yaw: 0.7, pitch: -0.18 };
+    const ligandBase = [];
+    for (let i = 0; i < 15; i++) {
+      const t = i / 14;
+      ligandBase.push({
+        x: 6 + Math.sin(t * Math.PI * 3) * 5,
+        y: 20 + t * 10,
+        z: 24 + Math.cos(t * Math.PI * 2.2) * 4
+      });
+    }
+    new Scene($("#heroCanvas"), (ctx, w, h, dt, t) => {
+      rot.yaw += dt * 0.22;
+      rot.pitch = -0.18 + Math.sin(t * 0.35) * 0.1;
+      const scale = Math.min(w, h) / 60;
+      const cx = w / 2, cy = h / 2 + 10;
+      const cycle = (t % 9) / 9;
+      const dock = clamp((cycle - 0.18) / 0.3, 0, 1);
+      const dockEase = dock * dock * (3 - 2 * dock);
+      // ligand approaches from above and settles on the rim
+      const lig = ligandBase.map(p => ({
+        x: p.x * (1 - 0.25 * dockEase),
+        y: p.y - 26 * (1 - dockEase) + 6 * dockEase,
+        z: p.z
+      }));
+      renderProtein(ctx, w, h, {
+        pts: MD2, rot, scale, cx, cy, t,
+        hot: HOT.map(x => ({ ...x, on: dockEase > .85 })),
+        chainColor: C.dock
+      });
+      // ligand chain
+      const P = lig.map(p => project3(p, rot, scale, cx, cy, 300));
+      ctx.globalAlpha = 0.85;
+      for (let i = 0; i < P.length - 1; i++) {
+        ctx.strokeStyle = C.acc; ctx.lineWidth = 3.4 * P[i].s; ctx.lineCap = "round";
+        ctx.beginPath(); ctx.moveTo(P[i].x, P[i].y); ctx.lineTo(P[i + 1].x, P[i + 1].y); ctx.stroke();
+      }
+      P.forEach(p => { ctx.fillStyle = C.acc; ctx.beginPath(); ctx.arc(p.x, p.y, 3.6 * p.s, 0, 6.283); ctx.fill(); });
+      ctx.globalAlpha = 1;
+      const caps = [
+        "MD2 receptor · searching for a binding surface",
+        "MD2 receptor · hotspot A82 / A85 identified",
+        "MD2 receptor · designed binder arriving",
+        "MD2 receptor · binder locked on the hotspots"
+      ];
+      const cap = $("#heroCap");
+      const txt = caps[dockEase < .15 ? 0 : dockEase < .85 ? (Math.floor(t * .5) % 2 ? 1 : 2) : 3];
+      if (cap.textContent !== txt) cap.textContent = txt;
+    });
+    $("#startBtn").addEventListener("click", () => {
+      badge("de novo binder"); badge("epitope");
+      complete(0); goTo(1);
+    });
+  }
+};
+
+/* ============================================================
+   11 · STAGE 1.1 — target docking setup
+   ============================================================ */
+Steps[1] = (() => {
+  const rot = { yaw: 0.45, pitch: -0.22 };
+  let pinned = { 82: false, 85: false };
+  let drag = null, moved = 0, hover = null, hotPts = [];
+
+  function setSeg(res, on) {
+    const seg = $(`#contig .seg[data-hot="${res}"]`);
+    if (!seg) return;
+    seg.classList.toggle("on", on);
+    seg.textContent = "A" + res + (on ? " ✓" : " ?");
+  }
+  function pin(res) {
+    if (pinned[res]) return;
+    pinned[res] = true; setSeg(res, true);
+    const left = Object.values(pinned).filter(Boolean).length;
+    if (left === 1) say("#s1say", "good", "<b>A82 pinned.</b> One more hotspot to go. Keep rotating — A85 sits a few residues along the same strand.");
+    else finish();
+  }
+  function finish() {
+    say("#s1say", "good", "<b>Both hotspots locked.</b> Your design contig is fixed — the AI will now build a 15-residue binder that covers exactly this patch.");
+    $("#s1disc").hidden = false;
+    note("Target: MD2 residues A82 + A85");
+    note("Everything outside the hotspots is scaffold — never mutate it");
+    value("target", "Target residues", "A82 / A85");
+    badge("epitope"); badge("hotspot");
+    complete(1);
+  }
+  function init() {
+    const cv = $("#targetCanvas");
+    new Scene(cv, (ctx, w, h, dt, t) => {
+      if (!drag) rot.yaw += dt * 0.12;
+      const r = renderProtein(ctx, w, h, {
+        pts: MD2, rot, t, chainColor: C.dock, rBase: 1.75,
+        hot: HOT.map(x => ({ ...x, on: pinned[x.res] }))
+      });
+      hotPts = r.hotPts;
+      ctx.globalAlpha = 0.7;
+      ctx.font = `700 11px ${C.mono}`;
+      ctx.fillStyle = C["ink-2"]; ctx.textAlign = "left";
+      ctx.fillText(pinned[82] && pinned[85] ? "TARGET LOCKED" : "TARGET SURFACE", 16, h - 16);
+      ctx.globalAlpha = 1;
+    });
+    cv.addEventListener("pointerdown", e => {
+      drag = { x: e.clientX, y: e.clientY, yaw: rot.yaw, pitch: rot.pitch };
+      moved = 0; cv.setPointerCapture(e.pointerId);
+    });
+    cv.addEventListener("pointermove", e => {
+      if (!drag) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      moved = Math.hypot(dx, dy);
+      rot.yaw = drag.yaw + dx * 0.009;
+      rot.pitch = clamp(drag.pitch - dy * 0.009, -1.3, 1.3);
+    });
+    const up = e => {
+      if (!drag) return;
+      const wasDrag = moved > 8;
+      drag = null;
+      if (wasDrag) return;
+      const rect = cv.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      let best = null, bestD = 30;
+      for (const hp of hotPts) {
+        const d = Math.hypot(hp.x - mx, hp.y - my);
+        if (d < bestD) { bestD = d; best = hp; }
+      }
+      if (best) pin(best.res);
+      else say("#s1say", "info", "Nothing there — that's scaffold. Look for the two red residues with the pulsing rings.");
+    };
+    cv.addEventListener("pointerup", up);
+    cv.addEventListener("pointercancel", () => { drag = null; });
+  }
+  function restore() { [82, 85].forEach(r => { pinned[r] = true; setSeg(r, true); }); finish(); }
+  return { init, restore };
+})();
+
+/* ============================================================
+   12 · STAGE 1.2 — generative AI
+   ============================================================ */
+function ribbonSVG(seed, color) {
+  const R = mulberry32(seed);
+  let d = "";
+  let x = 8, y = 26;
+  d += `M${x},${y}`;
+  for (let i = 0; i < 7; i++) {
+    const nx = 8 + (i + 1) * 12.6;
+    const ny = 8 + R() * 22;
+    const cx1 = x + 6, cy1 = y + (R() - .5) * 22;
+    const cx2 = nx - 6, cy2 = ny + (R() - .5) * 22;
+    d += ` C${cx1},${cy1} ${cx2},${cy2} ${nx},${ny}`;
+    x = nx; y = ny;
+  }
+  return `<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true"><path d="${d}" fill="none" stroke="${color}" stroke-width="3.4" stroke-linecap="round"/></svg>`;
+}
+function plddtStrip(seq, mean) {
+  const R = mulberry32(mean * 137 | 0);
+  let out = "";
+  const n = seq.length;
+  for (let i = 0; i < n; i++) {
+    const v = clamp(mean + (R() - .5) * 26, 20, 99);
+    out += `<rect x="${i * (100 / n)}" y="${40 - v * .4}" width="${100 / n - .6}" height="${v * .4}" fill="${PLDDT_COLOR(v)}" rx="1"/>`;
+  }
+  return `<svg viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">${out}</svg>`;
+}
+
+Steps[2] = (() => {
+  const LOG = [
+    ["<b>RFD3</b> · loading target contig A17–160", 260],
+    ["<b>RFD3</b> · hotspots A82, A85 locked as motif", 320],
+    ["<b>RFD3</b> · sampling 15-residue backbone, 50 denoising steps", 1400],
+    ["<span class='ok'>✓</span> 10 backbones generated (length 15)", 420],
+    ["<b>ProteinMPNN</b> · scoring amino-acid identities per position", 1100],
+    ["<b>ProteinMPNN</b> · temperature 0.1, 8 sequences per backbone", 900],
+    ["<span class='ok'>✓</span> 10 unique sequences selected", 380],
+    ["<span class='ac'>→</span> handing off to the filter funnel", 260]
+  ];
+  let running = false, done = false;
+
+  function init() {
+    $("#genRun").addEventListener("click", run);
+    $("#genReset").addEventListener("click", () => {
+      if (running) return;
+      done = false; $("#candWrap").hidden = true;
+      $("#genLog").innerHTML = `<span class="kbd-hint">Waiting for you to press the button.</span>`;
+      $("#genBar").style.width = "0%";
+      $("#genReset").disabled = true;
+      $("#genRun").disabled = false;
+      say("#s2say", "", "");
+      $("#s2say").innerHTML = "";
+    });
+  }
+  async function run() {
+    if (running || done) return;
+    running = true; $("#genRun").disabled = true;
+    const logEl = $("#genLog"), bar = $("#genBar");
+    logEl.innerHTML = "";
+    const total = LOG.reduce((s, l) => s + l[1], 0);
+    let acc = 0;
+    for (const [line, delay] of LOG) {
+      logEl.insertAdjacentHTML("beforeend", line + "\n");
+      logEl.scrollTop = logEl.scrollHeight;
+      await wait(delay);
+      acc += delay;
+      bar.style.width = Math.round(acc / total * 100) + "%";
+    }
+    logEl.insertAdjacentHTML("beforeend", `<span class="cursor"></span>`);
+    running = false; done = true;
+    $("#genReset").disabled = false;
+    reveal();
+  }
+  function reveal() {
+    $("#candWrap").hidden = false;
+    const grid = $("#candGrid");
+    if (!grid.innerHTML) {
+      grid.innerHTML = CANDS.map((c, i) => `
+        <div class="cand-card" style="animation-delay:${i * 55}ms">
+          <div class="hd"><span class="id">${c.id}</span><span class="kbd-hint num">15 aa</span></div>
+          ${ribbonSVG(i * 977 + 31, C.acc)}
+          <span class="seq">${c.seq}</span>
+          ${plddtStrip(c.seq, c.plddt)}
+        </div>`).join("");
+    }
+    say("#s2say", "good", "10 candidate binders ready. They all sit on the hotspot — but a design that <i>fits</i> is not the same as a design that <i>works</i>. Time for the funnel.");
+    $("#s2disc").hidden = false;
+    note("AI proposes 10 candidates; we must filter them");
+    value("cands", "Candidates generated", "10");
+    badge("de novo binder"); badge("ProteinMPNN");
+    complete(2);
+  }
+  function restore() {
+    $("#genLog").innerHTML = LOG.map(l => l[0]).join("\n") + `\n<span class="ok">✓</span> 10 unique sequences selected`;
+    $("#genBar").style.width = "100%";
+    $("#genRun").disabled = true; $("#genReset").disabled = false;
+    done = true; reveal();
+  }
+  return { init, restore };
+})();
+
+/* ============================================================
+   13 · funnel stages (2.1 – 2.4)
+   ============================================================ */
+function funnelStep(n, opts) {
+  const rule = RULES[n];
+  const metricHTML = opts.metric;
+  const compare = opts.compare;
+  const metricLabel = opts.metricLabel;
+  return {
+    init() {
+      const list = survivorsAfter(n - 1);
+      const root = $(`#f${n - 2}`);
+      if (!root) return;
+      root.innerHTML = list.map(c => `
+        <button class="fr-row" data-id="${c.id}" aria-pressed="false">
+          <span class="rid">${c.id}</span>
+          <span class="rseq">${c.seq}</span>
+          <span class="rmetric">${metricHTML(c)}</span>
+          <span class="rstate">keep</span>
+        </button>`).join("");
+      root.addEventListener("click", e => {
+        const row = e.target.closest(".fr-row"); if (!row) return;
+        const on = row.getAttribute("aria-pressed") !== "true";
+        row.setAttribute("aria-pressed", on ? "true" : "false");
+        row.querySelector(".rstate").textContent = on ? "discard" : "keep";
+        row.querySelector(".rstate").className = "rstate" + (on ? " no" : " ok");
+      });
+      $(`#f${n - 2}check`).addEventListener("click", check);
+    },
+    restore() {
+      const list = survivorsAfter(n - 1);
+      const root = $(`#f${n - 2}`);
+      if (root) list.forEach(c => {
+        const row = $(`.fr-row[data-id="${c.id}"]`, root);
+        if (!row) return;
+        const drop = !rule.pass(c);
+        row.setAttribute("aria-pressed", drop ? "true" : "false");
+        row.classList.add(drop ? "drop" : "keep");
+        const st = row.querySelector(".rstate");
+        st.textContent = drop ? "discard" : "keep";
+        st.className = "rstate " + (drop ? "no" : "ok");
+      });
+      finish(true);
+    }
+  };
+
+  function check() {
+    const list = survivorsAfter(n - 1);
+    const root = $(`#f${n - 2}`);
+    let wrong = 0, correctDrop = 0;
+    list.forEach(c => {
+      const row = $(`.fr-row[data-id="${c.id}"]`, root);
+      const dropped = row.getAttribute("aria-pressed") === "true";
+      const shouldDrop = !rule.pass(c);
+      if (dropped === shouldDrop) { if (shouldDrop) correctDrop++; }
+      else {
+        wrong++;
+        row.animate?.(
+          [{ transform: "translateX(0)" }, { transform: "translateX(-7px)" }, { transform: "translateX(6px)" }, { transform: "translateX(0)" }],
+          { duration: 400 }
+        );
+      }
+    });
+    if (wrong === 0) finish(false, correctDrop);
+    else say(`#f${n - 2}out`, "warn",
+      `${wrong} row${wrong > 1 ? "s" : ""} still don't match the rule. The rule is: <b>${opts.ruleText}</b>. Check every row against that number.`);
+  }
+
+  function finish(quiet, dropped) {
+    const list = survivorsAfter(n - 1);
+    list.forEach(c => {
+      const row = $(`.fr-row[data-id="${c.id}"]`, $(`#f${n - 2}`));
+      if (!row) return;
+      const drop = !rule.pass(c);
+      row.classList.add(drop ? "drop" : "keep");
+    });
+    const left = survivorsAfter(n);
+    if (!quiet) {
+      say(`#f${n - 2}out`, "good",
+        `Correct. <b>${list.length - left.length}</b> discarded, <b>${left.length}</b> still standing.`);
+    }
+    const disc = $(`#f${n - 2}disc`) || $(`#f${opts.disc}`);
+    $("#f1disc");
+    const discEl = $(opts.disc);
+    if (discEl) discEl.hidden = false;
+    opts.onDone(left);
+    complete(n);
+  }
+}
+
+/* 2.1 */
+Steps[3] = (() => {
+  const base = funnelStep(3, {
+    ruleText: "keep pLDDT ≥ 70",
+    metric: c => `<span class="mbar"><i style="width:${c.plddt}%;background:${PLDDT_COLOR(c.plddt)}"></i></span><b>${fmt(c.plddt)}</b>`,
+    disc: "#f1disc",
+    onDone(left) {
+      note("Discard anything with pLDDT < 70");
+      value("plddt", "Fold cut-off", "pLDDT ≥ 70");
+      badge("pLDDT"); badge("funnel");
+    }
+  });
+  return {
+    init() {
+      base.init();
+      $("#f1say").innerHTML = "";
+      say("#f1say", "info", "Click a row to mark it for discarding. Green rows are the ones you keep.");
+    },
+    restore() { base.restore(); }
+  };
+})();
+
+/* 2.2 */
+Steps[4] = (() => {
+  const base = funnelStep(4, {
+    ruleText: "keep ipTM ≥ 0.60",
+    metric: c => `<span class="mbar"><i style="width:${c.iptm * 100}%;background:${c.iptm >= .6 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.iptm.toFixed(2)}</b>`,
+    disc: "#f2disc",
+    onDone() {
+      note("Discard anything with ipTM < 0.60");
+      value("iptm", "Interface cut-off", "ipTM ≥ 0.60");
+      badge("ipTM"); badge("co-fold");
+    }
+  });
+  return {
+    init() {
+      base.init();
+      say("#f2say", "info", "These 8 all fold. Now we ask whether they <i>hold on</i>.");
+    },
+    restore() { base.restore(); }
+  };
+})();
+
+/* 2.3 */
+Steps[5] = (() => {
+  const base = funnelStep(5, {
+    ruleText: "keep candidates with 0 off-target hits",
+    metric: c => `<span class="mbar"><i style="width:${clamp(c.off / 3 * 100, 4, 100)}%;background:${c.off === 0 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.off} hit${c.off === 1 ? "" : "s"}</b>`,
+    disc: "#f3disc",
+    onDone() {
+      note("Discard any candidate that matches a human protein");
+      value("off", "Off-target cut-off", "0 hits");
+      badge("specificity"); badge("MMseqs2");
+    }
+  });
+  return {
+    init() {
+      base.init();
+      say("#f3say", "info", "MMseqs2 compares each sequence to every human protein. One hit is enough to be dangerous.");
+    },
+    restore() { base.restore(); }
+  };
+})();
+
+/* 2.4 */
+Steps[6] = (() => {
+  const base = funnelStep(6, {
+    ruleText: "keep candidates with 0 strong MHC binders",
+    metric: c => `<span class="mbar"><i style="width:${clamp(c.mhc / 3 * 100, 4, 100)}%;background:${c.mhc === 0 ? "var(--ok)" : "var(--hot)"}"></i></span><b>${c.mhc} binder${c.mhc === 1 ? "" : "s"}</b>`,
+    disc: "#f4disc",
+    onDone() {
+      note("Discard anything the immune system might recognise");
+      value("mhc", "Immune cut-off", "0 strong binders");
+      badge("immunogenic"); badge("MHCflurry");
+    }
+  });
+  return {
+    init() {
+      base.init();
+      say("#f4say", "info", "The strictest filter. Anything the body might flag as foreign gets removed here.");
+    },
+    restore() { base.restore(); }
+  };
+})();
+
+/* ============================================================
+   14 · STAGE 3.1 — molecular dynamics
+   ============================================================ */
+Steps[7] = (() => {
+  let progress = 0, running = false, ran = false, picked = null;
+  const NS = 20;
+  const rmsdA = t => 1.05 + 2.75 * (1 - Math.exp(-t * 0.28)) + 0.10 * Math.sin(t * 2.4);
+  const rmsdB = t => 1.00 + 0.34 * (1 - Math.exp(-t * 0.55)) + 0.07 * Math.sin(t * 3.1 + 1);
+
+  function drawComplex(ctx, w, h, rmsd, t, stable) {
+    const cx = w / 2, baseY = h * 0.74;
+    // target arc
+    for (let i = 0; i < 9; i++) {
+      const a = (i / 8 - .5) * Math.PI * 1.0;
+      bead(ctx, cx + Math.sin(a) * w * 0.36, baseY + Math.cos(a) * 9, 6.5, C.dock, .95);
+    }
+    // binder beads
+    const drift = stable ? 0 : clamp((rmsd - 1) * 7, 0, 22);
+    for (let i = 0; i < 7; i++) {
+      const x = cx + (i - 3) * w * 0.072 + Math.sin(t * 2.1 + i) * 1.4 + (i - 3) * drift * 0.16;
+      const y = baseY - 25 - drift * Math.sin(i * 0.7 + 1.2) + Math.cos(t * 2.6 + i) * 1.4;
+      bead(ctx, x, y, 6, stable ? C.acc : C.hot, .95);
+    }
+  }
+
+  function init() {
+    new Scene($("#mdSceneA"), (ctx, w, h, dt, t) => drawComplex(ctx, w, h, rmsdA(progress * NS), t, false));
+    new Scene($("#mdSceneB"), (ctx, w, h, dt, t) => drawComplex(ctx, w, h, rmsdB(progress * NS), t, true));
+
+    new Scene($("#mdChart"), (ctx, w, h) => {
+      const a = axes(ctx, w, h, {
+        xMax: NS, yMax: 5,
+        xTicks: [0, 5, 10, 15, 20], yTicks: [0, 1, 2, 3, 4, 5],
+        xLabel: "nanoseconds", yLabel: "RMSD (Å)", pad: { b: 34, l: 48 }
+      });
+      // 2 Å threshold
+      ctx.setLineDash([6, 4]); ctx.strokeStyle = C.warn; ctx.lineWidth = 1.6;
+      ctx.beginPath(); ctx.moveTo(a.X(0), a.Y(2)); ctx.lineTo(a.X(NS), a.Y(2)); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = C.warn; ctx.font = `700 11px ${C.mono}`; ctx.textAlign = "left";
+      ctx.fillText("2 Å · stable limit", a.X(0.4), a.Y(2) - 7);
+
+      if (progress <= 0) {
+        ctx.fillStyle = C["ink-2"]; ctx.textAlign = "center"; ctx.font = `500 13px ${C.mono}`;
+        ctx.fillText("Press Run to start the simulation", w / 2, h / 2);
+        return;
+      }
+      const pa = [], pb = [];
+      for (let i = 0; i <= 200; i++) {
+        const t = i / 200 * NS * progress;
+        pa.push([t, rmsdA(t)]); pb.push([t, rmsdB(t)]);
+      }
+      polyline(ctx, pa, a.X, a.Y, "hot", 3);
+      polyline(ctx, pb, a.X, a.Y, "acc", 3);
+      const tNow = NS * progress;
+      ctx.fillStyle = C.hot; ctx.beginPath(); ctx.arc(a.X(tNow), a.Y(rmsdA(tNow)), 5, 0, 6.283); ctx.fill();
+      ctx.fillStyle = C.acc; ctx.beginPath(); ctx.arc(a.X(tNow), a.Y(rmsdB(tNow)), 5, 0, 6.283); ctx.fill();
+      ctx.font = `700 11px ${C.mono}`; ctx.textAlign = "right";
+      ctx.fillStyle = C.hot; ctx.fillText("MD2B-01", w - 18, 24);
+      ctx.fillStyle = C.acc; ctx.fillText("MD2B-10", w - 18, 40);
+    });
+
+    $("#mdRun").addEventListener("click", run);
+    $("#mdPick").addEventListener("click", e => {
+      const b = e.target.closest(".choice"); if (!b || !ran) return;
+      press($("#mdPick"), b);
+      if (b.dataset.v === "MD2B-10") {
+        b.classList.add("good");
+        picked = "MD2B-10";
+        say("#mdSay", "good", "Correct. <b>MD2B-10</b> holds at 1.4 Å for the whole trajectory — it stays folded and stays bound. MD2B-01 drifts past 3.5 Å: that binder is coming apart.");
+        finish();
+      } else {
+        b.classList.add("meh");
+        say("#mdSay", "warn", "Look again at the red curve. It crosses the 2 Å line at about 4 ns and keeps climbing — that structure is unfolding. A binder that falls apart can't block anything.");
+      }
+    });
+  }
+
+  function run() {
+    if (running || ran) return;
+    running = true; $("#mdRun").disabled = true;
+    const T = REDUCED ? 900 : 5200;
+    const t0 = performance.now();
+    new Promise(res => {
+      const f = now => {
+        progress = clamp((now - t0) / T, 0, 1);
+        $("#mdClock").textContent = (progress * NS).toFixed(1) + " ns";
+        const t = progress * NS;
+        $("#mdRmsdA").textContent = rmsdA(t).toFixed(2) + " Å";
+        $("#mdRmsdB").textContent = rmsdB(t).toFixed(2) + " Å";
+        progress < 1 ? requestAnimationFrame(f) : res();
+      };
+      requestAnimationFrame(f);
+    }).then(() => {
+      running = false; ran = true;
+      $("#mdVerdA").innerHTML = "<b style='color:var(--hot)'>Unstable.</b> RMSD climbs past 2 Å at about 4 ns and keeps going. The binder unfolds and lets go.";
+      $("#mdVerdB").innerHTML = "<b style='color:var(--ok)'>Stable.</b> RMSD settles at 1.4 Å and stays flat for 20 ns. The complex holds.";
+      $("#mdAsk").hidden = false;
+      say("#mdSay", "info", "One curve is flat under 2 Å. The other is not. Pick the candidate you would take forward.");
+    });
+  }
+
+  function finish() {
+    $("#mddisc").hidden = false;
+    S.data.winner = { id: "MD2B-10", seq: "MTVQELLRELAGLKT", plddt: 94.1, iptm: 0.91 };
+    save();
+    note("Stability in a water box is not the same as a good score");
+    value("winner", "Lead candidate", "MD2B-10");
+    value("rmsd", "RMSD after 20 ns", "1.4 Å");
+    badge("molecular dynamics"); badge("RMSD");
+    complete(7);
+  }
+
+  function restore() {
+    ran = true; progress = 1; picked = "MD2B-10";
+    $("#mdRun").disabled = true;
+    $("#mdClock").textContent = "20.0 ns";
+    $("#mdRmsdA").textContent = rmsdA(NS).toFixed(2) + " Å";
+    $("#mdRmsdB").textContent = rmsdB(NS).toFixed(2) + " Å";
+    $("#mdVerdA").innerHTML = "<b style='color:var(--hot)'>Unstable.</b> RMSD climbs past 2 Å at about 4 ns.";
+    $("#mdVerdB").innerHTML = "<b style='color:var(--ok)'>Stable.</b> RMSD settles at 1.4 Å for 20 ns.";
+    $("#mdAsk").hidden = false;
+    const b = $('#mdPick [data-v="MD2B-10"]');
+    press($("#mdPick"), b); b.classList.add("good");
+    finish();
+  }
+  return { init, restore };
+})();
+
+/* ============================================================
+   15 · STAGE 3.2 — in silico evolution
+   ============================================================ */
+Steps[8] = (() => {
+  const BASE = "MTVQELLRELAGLKT";
+  const LOCKED = new Set([0, 4, 7, 10, 12]);
+  const OPTIONS = {
+    1:  [["A", -0.55], ["S", -0.20], ["V", -0.10]],
+    2:  [["I", -0.60], ["A", -0.15], ["T", +0.20]],
+    3:  [["N", -0.25], ["E", -0.10], ["K", +0.40]],
+    5:  [["I", -0.45], ["F", -0.20], ["V", -0.10]],
+    6:  [["M", -0.50], ["V", -0.15], ["A", +0.25]],
+    8:  [["D", -0.30], ["N", -0.20], ["Q", +0.10]],
+    9:  [["F", -0.40], ["M", -0.25], ["A", +0.20]],
+    11: [["A", -0.30], ["N", -0.10], ["S", +0.10]],
+    13: [["R", -0.50], ["Q", -0.15], ["E", +0.20]],
+    14: [["S", -0.20], ["V", -0.10], ["A", +0.15]]
+  };
+  const START = -6.6, TARGET = -8.0;
+  let muts = {};         // index -> residue
+  let history = [];      // stack for undo
+  let visits = {};       // index -> count
+  let bestSeen = {};     // index -> best delta
+  let totalTries = 0;
+
+  const seqNow = () => BASE.split("").map((ch, i) => muts[i] ?? ch).join("");
+  const dgNow = () => {
+    let d = START;
+    for (const k in muts) {
+      const idx = +k;
+      const opt = OPTIONS[idx]?.find(o => o[0] === muts[idx]);
+      if (opt) d += opt[1];
+    }
+    return d;
+  };
+
+  function init() {
+    render();
+    $("#ucbBtn").addEventListener("click", ucbSuggest);
+    $("#mutUndo").addEventListener("click", () => {
+      const last = history.pop();
+      if (!last) { say("#evoLog", "info", "Nothing to undo."); return; }
+      delete muts[last.idx];
+      render();
+      say("#evoLog", "info", `Reverted position ${last.idx + 1} back to ${last.from}.`);
+    });
+    $("#mutReset").addEventListener("click", () => {
+      muts = {}; history = []; visits = {}; bestSeen = {}; totalTries = 0;
+      render();
+      say("#evoLog", "info", "Sequence reset to the original design.");
+    });
+  }
+
+  function render() {
+    const seq = seqNow(), dg = dgNow();
+    $("#dgVal").textContent = `−${(-dg).toFixed(1)} kcal/mol`;
+    const pct = clamp((-dg - 6) / 4 * 100, 0, 100);
+    $("#dgBar").style.width = pct + "%";
+    $("#dgBar").style.background = dg <= TARGET ? "linear-gradient(90deg,var(--ok),var(--dock))" : "linear-gradient(90deg,var(--warn),var(--acc))";
+
+    const strip = $("#seqStrip");
+    strip.innerHTML = seq.split("").map((ch, i) => {
+      const locked = LOCKED.has(i);
+      const mutated = muts[i] !== undefined;
+      return `<button class="aa ${locked ? "locked" : ""} ${mutated ? "mut" : ""}" data-i="${i}"
+        ${locked ? 'aria-disabled="true"' : ""} title="${locked ? "Contacts the hotspot — protected" : "Click to mutate"}">
+        ${locked ? '<span class="lockmark" aria-hidden="true">🔒</span>' : ""}
+        <span class="r">${ch}</span><span class="p">${i + 1}</span>
+      </button>`;
+    }).join("");
+
+    strip.querySelectorAll(".aa").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = +btn.dataset.i;
+        if (LOCKED.has(i)) {
+          say("#evoLog", "warn", `Position ${i + 1} is <b>locked</b>. This residue sits directly against A82 or A85 — mutate it and the binder may simply stop gripping. Protecting key residues is a design constraint, not a suggestion.`);
+          return;
+        }
+        openMenu(i);
+      });
+    });
+    if (dg <= TARGET && !S.done[8]) finish();
+  }
+
+  function openMenu(i) {
+    const cur = muts[i] ?? BASE[i];
+    const opts = OPTIONS[i] || [];
+    $("#mutPanel").innerHTML = `
+      <div class="panel" style="display:grid;gap:10px">
+        <div class="row" style="justify-content:space-between">
+          <span class="label">Position ${i + 1} · currently ${cur}</span>
+          <button class="ghost" id="closeMut" style="padding:4px 10px;font-size:13px">Close</button>
+        </div>
+        <div class="mut-menu">
+          ${opts.filter(o => o[0] !== cur).map(o => `
+            <button class="mut-opt" data-aa="${o[0]}" data-d="${o[1]}">
+              ${cur} → ${o[0]}
+              <span class="d ${o[1] < 0 ? "up" : "dn"}">${o[1] < 0 ? "▼" : "▲"} ${Math.abs(o[1]).toFixed(2)}</span>
+            </button>`).join("")}
+        </div>
+        <p class="kbd-hint">Predicted change in binding free energy. Negative is stronger.</p>
+      </div>`;
+    $("#closeMut").addEventListener("click", () => { $("#mutPanel").innerHTML = ""; });
+    $("#mutPanel").querySelectorAll(".mut-opt").forEach(b => {
+      b.addEventListener("click", () => {
+        const aa = b.dataset.aa, delta = +b.dataset.d;
+        history.push({ idx: i, from: cur });
+        muts[i] = aa;
+        visits[i] = (visits[i] || 0) + 1;
+        totalTries++;
+        bestSeen[i] = Math.min(bestSeen[i] ?? 0, delta);
+        $("#mutPanel").innerHTML = "";
+        render();
+        say("#evoLog", delta < 0 ? "good" : "warn",
+          `Position ${i + 1}: <b>${cur} → ${aa}</b>. Binding free energy ${delta < 0 ? "improved" : "got worse"} by ${Math.abs(delta).toFixed(2)} kcal/mol. Now <b>−${(-dgNow()).toFixed(1)}</b> kcal/mol.`);
+      });
+    });
+  }
+
+  function ucbSuggest() {
+    const c = 0.45;
+    const scored = Object.keys(OPTIONS).map(k => {
+      const i = +k;
+      const n = visits[i] || 0;
+      const mu = bestSeen[i] ?? 0;               // most negative = best
+      const bonus = c * Math.sqrt(Math.log(totalTries + 1) / (n + 0.5));
+      // UCB for minimisation: lower mu is better, so score = mu - bonus
+      return { i, n, mu, bonus, score: mu - bonus };
+    }).sort((a, b) => a.score - b.score);
+    const best = scored[0];
+    $$("#seqStrip .aa").forEach(el => el.classList.remove("suggest"));
+    $(`#seqStrip .aa[data-i="${best.i}"]`)?.classList.add("suggest");
+    $("#ucbPanel").hidden = false;
+    $("#ucbTable").innerHTML = scored.slice(0, 5).map(s =>
+      `pos ${String(s.i + 1).padStart(2)} · tried ${s.n}× · best μ ${s.mu.toFixed(2)} · bonus ${s.bonus.toFixed(2)} · score ${s.score.toFixed(2)}`
+    ).join("<br>");
+    say("#evoLog", "info", `UCB suggests <b>position ${best.i + 1}</b>. It has the lowest score — meaning it either looks promising (μ) or we haven't tried it enough (bonus). Click it to see the options.`);
+    badge("UCB");
+  }
+
+  function finish() {
+    $("#evodisc").hidden = false;
+    const seq = seqNow(), dg = dgNow();
+    S.data.winner.seq = seq;
+    S.data.winner.dg = dg;
+    S.data.winner.muts = { ...muts };
+    save();
+    note("Every mutation was scored by a model, not a pipette");
+    value("dg", "Binding energy ΔG", `−${(-dg).toFixed(1)} kcal/mol`);
+    badge("binding free energy"); badge("Bayesian optimisation");
+    if (!S.done[8]) {
+      say("#evoLog", "good", `<b>ΔG = −${(-dg).toFixed(1)} kcal/mol.</b> That's past the −8.0 target. Your peptide now binds strongly enough to be worth synthesising.`);
+      complete(8);
+    }
+  }
+
+  function restore() {
+    // apply a canonical winning set: positions 2, 3, 14 → I, A, R
+    muts = { 1: "A", 2: "I", 13: "R" };
+    history = [];
+    render();
+    finish();
+  }
+  return { init, restore };
+})();
+
+/* ============================================================
+   16 · STAGE 4.1 — reverse translation
+   ============================================================ */
+Steps[9] = (() => {
+  const CODONS = {
+    A: ["GCG", "GCA"], C: ["TGC", "TGT"], D: ["GAT", "GAC"], E: ["GAA", "GAG"],
+    F: ["TTC", "TTT"], G: ["GGC", "GGG"], H: ["CAT", "CAC"], I: ["ATT", "ATA"],
+    K: ["AAA", "AAG"], L: ["CTG", "CTA"], M: ["ATG", "ATG"], N: ["AAT", "AAC"],
+    P: ["CCG", "CCA"], Q: ["CAG", "CAA"], R: ["CGT", "CGG"], S: ["AGC", "TCG"],
+    T: ["ACC", "ACA"], V: ["GTT", "GTA"], W: ["TGG", "TGG"], Y: ["TAT", "TAC"]
+  };
+  const POS = [1, 5, 8, 11, 14];
+  let chosen = {};
+  let solvedCount = 0;
+
+  const winSeq = () => S.data.winner?.seq || "MTVQELLRELAGLKT";
+
+  function init() {
+    const seq = winSeq();
+    $("#winSeq").innerHTML = seq.split("").map((ch, i) =>
+      `<span class="aa" style="cursor:default"><span class="r">${ch}</span><span class="p">${i + 1}</span></span>`
+    ).join("");
+
+    $("#codonRows").innerHTML = POS.map(i => {
+      const aa = seq[i];
+      const pair = CODONS[aa] || ["GCT", "GCC"];
+      const opts = pair[0] === pair[1] ? [pair[0]] : [pair[0], pair[1]];
+      const shuffled = opts.length > 1 && (i % 2 === 1) ? [opts[1], opts[0]] : opts;
+      return `<div class="codon-row" data-i="${i}">
+        <span class="aa-badge">${aa}</span>
+        <div class="codon-opts">
+          ${shuffled.map(c => `<button class="codon" data-c="${c}" data-ok="${c === pair[0] ? "1" : "0"}">${c}</button>`).join("")}
+          <span class="kbd-hint" style="align-self:center">position ${i + 1}</span>
+        </div>
+      </div>`;
+    }).join("");
+
+    $("#codonRows").addEventListener("click", e => {
+      const b = e.target.closest(".codon"); if (!b) return;
+      const row = b.closest(".codon-row");
+      if (row.dataset.done === "1") return;
+      if (b.dataset.ok === "1") {
+        row.dataset.done = "1";
+        row.querySelectorAll(".codon").forEach(x => x.classList.remove("no"));
+        b.classList.add("ok");
+        row.querySelectorAll(".codon").forEach(x => { if (x !== b) x.disabled = true; });
+        solvedCount++;
+        say("#codonSay", "good", `Correct — <b>${b.dataset.c}</b>. <i>E. coli</i> carries plenty of tRNA for this codon, so the ribosome doesn't stall. (${solvedCount}/${POS.length})`);
+        if (solvedCount === POS.length) finish();
+      } else {
+        b.classList.add("no");
+        say("#codonSay", "warn", `<b>${b.dataset.c}</b> also codes for that amino acid — but it is a rare codon in <i>E. coli</i>. The ribosome would slow down or stall. Try the other one.`);
+      }
+    });
+  }
+
+  function finish() {
+    const seq = winSeq();
+    const optimal = seq.split("").map(ch => (CODONS[ch] || ["GCT"])[0]).join(" ");
+    const gene = "ATG " + optimal + " TAA";
+    $("#geneWrap").hidden = false;
+    $("#geneOut").innerHTML = gene.replace(/(ATG|TAA)/g, "<b>$1</b>");
+    $("#codondisc").hidden = false;
+    S.data.gene = gene.replace(/ /g, "");
+    save();
+    note("Same protein, many possible genes — pick the one the cell reads fastest");
+    value("gene", "Gene length", gene.replace(/ /g, "").length + " bp");
+    badge("codon optimisation");
+    complete(9);
+  }
+
+  function restore() {
+    const seq = winSeq();
+    POS.forEach((i, k) => {
+      const row = $(`.codon-row[data-i="${i}"]`);
+      if (!row) return;
+      row.dataset.done = "1";
+      const aa = seq[i];
+      const ok = (CODONS[aa] || ["GCT"])[0];
+      row.querySelectorAll(".codon").forEach(x => {
+        if (x.dataset.c === ok) x.classList.add("ok"); else x.disabled = true;
+      });
+      solvedCount = k + 1;
+    });
+    finish();
+  }
+  return { init, restore };
+})();
+
+/* ============================================================
+   17 · STAGE 4.2 — quiz + certificate
+   ============================================================ */
+const QUIZ = [
+  {
+    q: "Your designed gene goes into a disabled lab strain of <i>E. coli</i> that cannot survive outside a rich medium. What biosafety level does this work need?",
+    a: ["BSL-1", "BSL-3", "BSL-4"],
+    ok: 0,
+    why: "A non-pathogenic, disabled lab strain handled with standard hygiene is BSL-1. Nothing here is dangerous."
+  },
+  {
+    q: "Before ordering the DNA, what should you screen the sequence against?",
+    a: ["A database of toxins and virulence genes", "The internet, for similar-looking proteins", "Nothing — the AI already checked"],
+    ok: 0,
+    why: "Every synthesised sequence is screened against toxin and virulence databases before it is made. This is standard practice and a legal requirement in many countries."
+  },
+  {
+    q: "Your peptide is meant for a wound dressing. Which result would stop you from proceeding?",
+    a: ["A strong predicted MHC-II binder", "A pLDDT of 94", "A ΔG of −8.4 kcal/mol"],
+    ok: 0,
+    why: "A strong MHC binder means the immune system may attack your own medicine. The other two results are exactly what you want."
+  }
+];
+
+Steps[10] = (() => {
+  let answered = 0, correct = 0;
+  function init() {
+    $("#quiz").innerHTML = QUIZ.map((item, qi) => `
+      <div class="q" data-q="${qi}">
+        <p>${qi + 1}. ${item.q}</p>
+        <div class="choices">
+          ${item.a.map((a, ai) => `<button class="choice" data-a="${ai}">${a}</button>`).join("")}
+        </div>
+        <div class="fb"></div>
+      </div>`).join("");
+    $("#quiz").addEventListener("click", e => {
+      const b = e.target.closest(".choice"); if (!b) return;
+      const wrap = b.closest(".q");
+      const qi = +wrap.dataset.q;
+      if (wrap.dataset.done === "1") return;
+      const ai = +b.dataset.a;
+      if (ai === QUIZ[qi].ok) {
+        wrap.dataset.done = "1";
+        b.classList.add("good");
+        wrap.querySelectorAll(".choice").forEach(x => { if (x !== b) x.disabled = true; });
+        wrap.querySelector(".fb").innerHTML = `<div class="say good"><span class="ic">✓</span><span>${QUIZ[qi].why}</span></div>`;
+        correct++;
+      } else {
+        b.classList.add("meh");
+        wrap.querySelector(".fb").innerHTML = `<div class="say warn"><span class="ic">?</span><span>Not quite. Think about which answer protects people rather than which answer is convenient.</span></div>`;
+      }
+      answered++;
+      if (correct === QUIZ.length) finish();
+    });
+  }
+  function finish() {
+    say("#quizSay", "good", "All three correct. Your design and your paperwork are both ready.");
+    note("Screen before you synthesise");
+    badge("BSL-1"); badge("biosecurity");
+    Steps[11].fill();
+    complete(10);
+  }
+  function restore() {
+    QUIZ.forEach((item, qi) => {
+      const wrap = $(`.q[data-q="${qi}"]`); if (!wrap) return;
+      wrap.dataset.done = "1";
+      const b = wrap.querySelector(`.choice[data-a="${item.ok}"]`);
+      b.classList.add("good");
+      wrap.querySelectorAll(".choice").forEach(x => { if (x !== b) x.disabled = true; });
+      wrap.querySelector(".fb").innerHTML = `<div class="say good"><span class="ic">✓</span><span>${item.why}</span></div>`;
+    });
+    correct = QUIZ.length;
+    finish();
+  }
+  return { init, restore };
+})();
+
+/* ============================================================
+   18 · CERTIFICATE
+   ============================================================ */
+Steps[11] = {
+  init() {
+    $("#openStudioBtn").addEventListener("click", () => { complete(11); goTo(12); });
+    $("#certPrint").addEventListener("click", () => {
+      try { print(); } catch (e) { toast("Printing isn't available here. Take a screenshot instead."); }
+    });
+    const nameInput = $("#certName");
+    nameInput.value = S.data.name || "";
+    nameInput.addEventListener("input", () => { S.data.name = nameInput.value; save(); });
+    $("#certDate").textContent = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  },
+  fill() {
+    const w = S.data.winner || { id: "MD2B-10", seq: "MTVQELLRELAGLKT", plddt: 94.1, iptm: 0.91, dg: -8.2 };
+    $("#lcId").textContent = w.id;
+    $("#lcPlddt").textContent = fmt(w.plddt);
+    $("#lcIptm").textContent = (w.iptm ?? 0.91).toFixed(2);
+    $("#lcDg").textContent = "−" + Math.abs(w.dg ?? 8.2).toFixed(1);
+    $("#lcSeq").textContent = w.seq;
+    const gene = S.data.gene || "";
+    $("#lcGene").textContent = gene || "—";
+    const muts = w.muts ? Object.keys(w.muts).length : 3;
+    $("#lcRules").innerHTML = [
+      `Cover the hotspot and nothing else — the epitope is the whole brief.`,
+      `Filter cheapest-first: fold (pLDDT ≥ 70) → grip (ipTM ≥ 0.60) → safety (0 off-target hits) → immune (0 strong MHC binders).`,
+      `A good score is not the same as a stable structure — always simulate the motion.`,
+      `Bind tighter by mutating <b>${muts}</b> residue${muts === 1 ? "" : "s"}</b>, never the contact residues.`,
+      `64 codons, 20 amino acids: choose the fast ones for the host cell.`
+    ].map(r => `<li>${r}</li>`).join("");
+  },
+  restore() { this.fill(); complete(10); }
+};
+
+/* ============================================================
+   19 · OPEN STUDIO
+   ============================================================ */
+Steps[12] = (() => {
+  const DEF = { plddt: 70, iptm: 0.60, mhc: 0 };
+  const P = { ...DEF };
+  const SL = [
+    ["plddt", "pLDDT cut-off", 50, 95, 1, v => v],
+    ["iptm", "ipTM cut-off", 30, 95, 1, v => (v / 100).toFixed(2)],
+    ["mhc", "Allowed strong MHC binders", 0, 3, 1, v => v],
+  ];
+  const survive = c => c.plddt >= P.plddt && c.iptm >= P.iptm / 100 && c.off === 0 && c.mhc <= P.mhc;
+  const stageCount = (k) => CANDS.filter(c => {
+    if (k >= 1 && c.plddt < P.plddt) return false;
+    if (k >= 2 && c.iptm < P.iptm / 100) return false;
+    if (k >= 3 && c.off !== 0) return false;
+    if (k >= 4 && c.mhc > P.mhc) return false;
+    return true;
+  }).length;
+
+  function init() {
+    $("#studioSliders").innerHTML = SL.map(([k, l, mn, mx, st, f]) =>
+      `<div class="slider"><div class="top"><label for="ol-${k}">${l}</label><output class="num" id="ol-${k}-o">${f(P[k])}</output></div>
+       <input type="range" id="ol-${k}" min="${mn}" max="${mx}" step="${st}" value="${P[k]}"></div>`).join("");
+    SL.forEach(([k, , , , , f]) => {
+      $(`#ol-${k}`).addEventListener("input", e => { P[k] = +e.target.value; $(`#ol-${k}-o`).textContent = f(P[k]); report(); });
+    });
+    $("#studioReset").addEventListener("click", () => {
+      Object.assign(P, DEF);
+      SL.forEach(([k, , , , , f]) => {
+        const i = $(`#ol-${k}`); i.value = P[k]; setRangeFill(i); $(`#ol-${k}-o`).textContent = f(P[k]);
+      });
+      report();
+    });
+    new Scene($("#studioCanvas"), (ctx, w, h) => {
+      const counts = [10, stageCount(1), stageCount(2), stageCount(3), stageCount(4)];
+      const labels = ["start", "fold", "grip", "safety", "immune"];
+      const a = axes(ctx, w, h, { xMin: -.5, xMax: 4.5, yMax: 10, xTicks: [0, 1, 2, 3, 4], yTicks: [0, 2, 4, 6, 8, 10], yLabel: "candidates surviving", pad: { b: 34, l: 46 } });
+      const bw = (a.X(1) - a.X(0)) * .58;
+      counts.forEach((c, i) => {
+        ctx.fillStyle = i === 4 ? (c > 0 ? C.ok : C.hot) : C.acc;
+        ctx.globalAlpha = i === 4 ? 1 : .85 - i * .12;
+        ctx.fillRect(a.X(i) - bw / 2, a.Y(c), bw, a.Y(0) - a.Y(c));
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = C.ink; ctx.font = `700 12px ${C.mono}`; ctx.textAlign = "center";
+        ctx.fillText(c, a.X(i), a.Y(c) - 7);
+        ctx.fillStyle = C["ink-2"]; ctx.font = `700 10.5px ${C.mono}`;
+        ctx.fillText(labels[i], a.X(i), h - 8);
+      });
+    });
+    report();
+  }
+  function report() {
+    const left = CANDS.filter(survive);
+    const kind = left.length === 0 ? "warn" : left.length <= 2 ? "good" : "info";
+    say("#studioSay", kind,
+      left.length === 0
+        ? `No candidate survives these settings. The funnel is too strict — a filter that removes everything is not a safe filter, it's a useless one.`
+        : `<b>${left.length}</b> candidate${left.length === 1 ? "" : "s"} survive: ${left.map(c => `<span class="num">${c.id}</span>`).join(", ")}. At the workshop settings exactly <b>2</b> survive.`);
+  }
+  return { init, restore() { } };
+})();
+
+/* ============================================================
+   20 · optional maths panels
+   ============================================================ */
+const FR = (a, b) => `<span class="fr"><span>${a}</span><span>${b}</span></span>`;
+const OP = o => `<span class="op">${o}</span>`;
+const MATHS = {
+  1: {
+    bridge: "A binding surface is a question about geometry. Every residue on MD2 has a position in 3D space; whether a designed residue can reach it is a distance calculation. When we say 'A82 and A85 are the hotspot', we mean: any binder that covers this pair will block the pocket.",
+    eq: `<span class="st">contact(i, j)</span> ${OP("⟺")} <span class="st">‖ x<sub>i</sub> ${OP("−")} y<sub>j</sub> ‖ &lt; r<sub>c</sub></span>`,
+    key: [["x<sub>i</sub>, y<sub>j</sub>", "atom positions of target and binder"], ["r<sub>c</sub>", "contact distance, about 5 Å"], ["in practice", "a whole matrix of pairwise distances decides the interface"]]
+  },
+  2: {
+    bridge: "RFdiffusion is trained to reverse a noising process. If you add noise to a real protein structure over many steps, you get pure static; the model learns to run that backwards. Generation starts from static and ends at a protein.",
+    eq: `<span class="st">x<sub>t−1</sub> ${OP("=")} ${FR("1", "√α<sub>t</sub>")} ( x<sub>t</sub> ${OP("−")} ${FR("1 − α<sub>t</sub>", "√(1 − ᾱ<sub>t</sub>)")} ε<sub>θ</sub>(x<sub>t</sub>, t) )</span>`,
+    key: [["ε<sub>θ</sub>", "the network's guess at the noise"], ["t", "how much noise is currently present"], ["the motif", "positions A82 / A85 are held fixed at every step"]]
+  },
+  3: {
+    bridge: "pLDDT is a per-residue confidence. AlphaFold was trained to predict how close its own prediction would land, so the number is not a guess about the protein — it is a calibrated statement about the model.",
+    eq: `<span class="st">pLDDT<sub>i</sub> ${OP("≈")} 100 × P( error<sub>i</sub> &lt; 2 Å )</span>`,
+    key: [["i", "one residue"], ["> 90", "confident enough for most work"], ["< 70", "the backbone is probably not real"]]
+  },
+  4: {
+    bridge: "ipTM measures whether the model is confident about the interface between two chains, separately from whether each chain folds correctly. It is a normalised score, so it can be compared across different complexes.",
+    eq: `<span class="st">ipTM ${OP("=")} ${FR("1", "1 + d̄<sub>interface</sub> / d<sub>0</sub>")}</span>`,
+    key: [["d̄", "average distance error at the interface"], ["d<sub>0</sub>", "a normalising length that grows with complex size"], ["0.60", "the usual bar for 'worth testing in the lab'"]]
+  },
+  5: {
+    bridge: "MMseqs2 looks for local alignments between your peptide and every human protein, then reports how surprising each match is. The E-value is the number of matches this good you would expect to find by chance in a database this size.",
+    eq: `<span class="st">E ${OP("=")} K · m · n · e<sup>−λS</sup></span>`,
+    key: [["S", "the alignment score"], ["K, λ", "constants fitted to the scoring matrix"], ["m, n", "lengths of the two sequences being compared"]]
+  },
+  6: {
+    bridge: "MHCflurry does not output a yes/no answer. It outputs a percentile rank: where does this peptide sit among millions of random peptides? A rank below 0.5% means it is in the top half-percent of binders — a strong flag.",
+    eq: `<span class="st">rank<sub>i</sub> ${OP("=")} ${FR("#{ j : score<sub>j</sub> ≥ score<sub>i</sub> }", "N")} × 100%</span>`,
+    key: [["score", "predicted presentation strength"], ["rank < 0.5%", "strong binder — discard"], ["why rank", "raw scores are not comparable across alleles"]]
+  },
+  7: {
+    bridge: "Molecular dynamics integrates Newton's equations for every atom. RMSD is simply the average distance each atom has moved from its starting position after the structure is best-fitted back onto the original.",
+    eq: `<span class="st">RMSD(t) ${OP("=")} √<span class="rad">${FR("1", "N")} <span class="big">Σ</span><sub>i=1</sub><sup>N</sup> ‖ r<sub>i</sub>(t) ${OP("−")} r<sub>i</sub>(0) ‖²</span></span>`,
+    key: [["N", "number of atoms compared"], ["flat under 2 Å", "the fold is holding"], ["climbing past 2 Å", "the structure is unfolding"]]
+  },
+  8: {
+    bridge: "Every mutation is a gamble: it might improve binding, or it might not. Upper Confidence Bound is the classic way to gamble well — try the options that look good, but also try the ones you know least about, because your estimate of them is uncertain.",
+    eq: `<span class="st">a<sub>i</sub> ${OP("=")} μ<sub>i</sub> ${OP("−")} c √<span class="rad">${FR("ln N", "n<sub>i</sub>")}</span></span>`,
+    key: [["μ<sub>i</sub>", "best result seen at position i so far"], ["n<sub>i</sub>", "how many times i has been tried"], ["N", "total tries across all positions"], ["c", "exploration weight — bigger c means more curiosity"]]
+  },
+  9: {
+    bridge: "There are 4³ = 64 codons and only 20 amino acids, so the code is redundant. Different organisms prefer different codons for the same amino acid — matching the host's preference is free efficiency.",
+    eq: `<span class="st">codon usage bias: ${FR("count(codon)", "count(synonymous family)")}</span>`,
+    key: [["synonymous", "different codons, same amino acid"], ["highly expressed genes", "use the preferred codons almost exclusively"], ["why it matters", "a rare codon can stall the ribosome and cut yield"]]
+  },
+  10: {
+    bridge: "Risk is not a yes/no property. Each check answers a different question — does it fold, does it bind, does it resemble something dangerous, will the body attack it — and the design only moves forward when all four answers are acceptable.",
+    eq: `<span class="st">accept ${OP("⟺")} pLDDT ≥ 70 ${OP("∧")} ipTM ≥ 0.60 ${OP("∧")} hits = 0 ${OP("∧")} MHC = 0</span>`,
+    key: [["∧", "all of these must hold"], ["why not average them", "a design that fails one check is unusable, however good the others are"]]
+  }
+};
+function buildMaths() {
+  Object.keys(MATHS).forEach(k => {
+    const n = +k, m = MATHS[k];
+    const foot = $(`[data-step="${n}"] .step-foot`);
+    if (!foot) return;
+    const id = "maths-" + n;
+    const btn = document.createElement("button");
+    btn.className = "ghost maths-btn"; btn.type = "button";
+    btn.setAttribute("aria-expanded", "false"); btn.setAttribute("aria-controls", id);
+    btn.innerHTML = `<span class="mi" aria-hidden="true">ƒ</span>The maths behind this`;
+    const panel = document.createElement("div");
+    panel.className = "maths-panel"; panel.id = id; panel.hidden = true;
+    panel.innerHTML =
+      `<p>${m.bridge}</p>` +
+      `<button class="ghost maths-more" type="button" aria-expanded="false">Show the equation</button>` +
+      `<div class="maths-eq" hidden><div class="eq">${m.eq}</div>` +
+      `<div class="eq-key">${m.key.map(([a, b]) => `<div><b>${a}</b> &nbsp;${b}</div>`).join("")}</div></div>`;
+    const next = $(":scope > .next-btn", foot);
+    foot.insertBefore(btn, next);
+    foot.insertBefore(panel, next);
+    btn.addEventListener("click", () => {
+      const open = panel.hidden;
+      panel.hidden = !open; btn.setAttribute("aria-expanded", open);
+      if (open) badge("Curious");
+    });
+    const more = $(".maths-more", panel), eq = $(".maths-eq", panel);
+    more.addEventListener("click", () => {
+      const open = eq.hidden;
+      eq.hidden = !open; more.setAttribute("aria-expanded", open);
+      more.textContent = open ? "Hide the equation" : "Show the equation";
+    });
+  });
+}
+
+/* ============================================================
+   21 · chart helpers
+   ============================================================ */
+function axes(ctx, w, h, o) {
+  const pad = Object.assign({ l: 44, r: 16, t: 20, b: 34 }, o.pad || {});
+  const xMin = o.xMin || 0;
+  const X = v => pad.l + (v - xMin) / (o.xMax - xMin) * (w - pad.l - pad.r);
+  const Y = v => h - pad.b - v / o.yMax * (h - pad.t - pad.b);
+  ctx.font = `500 11px ${C.mono}`; ctx.lineWidth = 1;
+  (o.yTicks || []).forEach(v => {
+    ctx.strokeStyle = C.line; ctx.globalAlpha = .7;
+    ctx.beginPath(); ctx.moveTo(pad.l, Y(v)); ctx.lineTo(w - pad.r, Y(v)); ctx.stroke();
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = C["ink-2"]; ctx.textAlign = "right"; ctx.fillText(v, pad.l - 6, Y(v) + 4);
+  });
+  (o.xTicks || []).forEach(v => {
+    ctx.fillStyle = C["ink-2"]; ctx.textAlign = "center";
+    ctx.fillText(o.xFmt ? o.xFmt(v) : v, X(v), h - pad.b + 16);
+  });
+  ctx.strokeStyle = C["ink-2"];
+  ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, h - pad.b); ctx.lineTo(w - pad.r, h - pad.b); ctx.stroke();
+  if (o.xLabel) { ctx.fillStyle = C["ink-2"]; ctx.textAlign = "right"; ctx.fillText(o.xLabel, w - pad.r, h - 4); }
+  if (o.yLabel) { ctx.fillStyle = C["ink-2"]; ctx.textAlign = "left"; ctx.fillText(o.yLabel, pad.l + 6, pad.t - 6); }
+  return { X, Y, pad };
+}
+function polyline(ctx, pts, X, Y, color, width = 3, dash) {
+  if (!pts.length) return;
+  ctx.strokeStyle = C[color] || color;
+  ctx.lineWidth = width; ctx.lineJoin = "round"; ctx.lineCap = "round";
+  ctx.setLineDash(dash || []);
+  ctx.beginPath();
+  pts.forEach(([x, y], i) => i ? ctx.lineTo(X(x), Y(y)) : ctx.moveTo(X(x), Y(y)));
+  ctx.stroke(); ctx.setLineDash([]);
+}
+
+/* ============================================================
+   22 · scroll effects
+   ============================================================ */
+function initScrollFx() {
+  const secs = $$("[data-step]");
+  const vis = new Map();
+  const io = new IntersectionObserver(es => {
+    es.forEach(en => vis.set(en.target, en.intersectionRatio));
+    let best = null, br = 0;
+    vis.forEach((r, el) => { if (r > br) { br = r; best = el; } });
+    if (best) $$(".pchip").forEach(c => c.classList.toggle("current", c.dataset.go === best.dataset.step));
+  }, { threshold: [0, .15, .3, .5, .7, 1], rootMargin: "-20% 0px -40% 0px" });
+  secs.forEach(s => io.observe(s));
+
+  let ticking = false;
+  const onScroll = () => {
+    if (ticking) return; ticking = true;
+    requestAnimationFrame(() => {
+      const max = document.documentElement.scrollHeight - innerHeight;
+      $("#scrollbar").style.setProperty("--sp", max > 0 ? Math.min(1, scrollY / max) : 0);
+      ticking = false;
+    });
+  };
+  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+  if (!REDUCED) {
+    const rio = new IntersectionObserver(es => es.forEach(en => {
+      if (en.isIntersecting) { en.target.classList.remove("pre"); rio.unobserve(en.target); }
+    }), { rootMargin: "0px 0px -8% 0px" });
+    $$(".rv").forEach((el, i) => {
+      if (el.getBoundingClientRect().top > innerHeight) {
+        el.classList.add("pre"); el.style.transitionDelay = (i % 3) * 70 + "ms"; rio.observe(el);
+      }
+    });
+  }
+}
+
+/* ============================================================
+   23 · boot
+   ============================================================ */
+(function boot() {
+  load();
+  buildProgress();
+  for (let n = 0; n <= 12; n++) Steps[n]?.init?.();
+  buildMaths();
+  for (let n = 1; n <= 12; n++) if (S.done[n]) Steps[n]?.restore?.();
+  applyLocks();
+  renderNotebook();
+  $$('input[type="range"]').forEach(setRangeFill);
+  initScrollFx();
+  lastT = performance.now(); rafId = requestAnimationFrame(loop);
+
+  const next = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].find(n => S.done[0] && !S.done[n]);
+  if (next) { toast(`Welcome back. Continuing at ${NAMES[next]}.`); setTimeout(() => goTo(next), 500); }
+})();
+</script>
+</body>
+</html>
