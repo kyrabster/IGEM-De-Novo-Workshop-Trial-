@@ -428,8 +428,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   <div class="m-top">
     <span class="eyebrow">HKU iGEM · De novo design studio</span>
     <h1 class="m-title">Design a <em>better</em> protein to switch off inflammation.</h1>
-    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a receptor called <b>MD2</b>.</p>
-    <p class="m-lede">A peptide called <b>TAP2</b> already blocks MD2 and helps wounds heal — but it is short-lived, moderately strong, and can provoke an immune response. Our job is not to invent from nothing: it is to <b>design a better TAP2</b> using generative AI, then run it through the same filters a real drug candidate faces.</p>
+    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a co-receptor called <b>MD2</b>.</p>
+    <p class="m-lede">A peptide called <b>TAP2 (TLR4 Antagonistic Peptide 2)</b> already blocks MD2 and helps wounds heal — but it is short-lived, moderately strong, and can provoke an immune response. Our job is not to invent from nothing: it is to <b>design a better TAP2</b> using generative AI, then run it through the same filters a real drug candidate faces.</p>
     <div class="m-meta">
       <span><b>15 stages</b> · about 50 minutes</span>
       <span><b>No coding</b> needed</span>
@@ -445,8 +445,8 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   </div>
 
   <div class="hero-wrap">
-    <canvas id="heroCanvas" aria-label="Rotating MD2 receptor with a designed peptide docking onto it"></canvas>
-    <span class="hero-cap" id="heroCap">MD2 receptor · residues A17–A160</span>
+    <canvas id="heroCanvas" aria-label="Rotating MD2 co-receptor with a designed peptide docking onto it"></canvas>
+    <span class="hero-cap" id="heroCap">MD2 co-receptor · residues A17–A160</span>
     <span class="hero-key">
       <i><span class="dot" style="background:var(--dock)"></span>MD2 chain</i>
       <i><span class="dot" style="background:var(--hot)"></span>hotspots A82 / A85</i>
@@ -466,13 +466,13 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   <header class="step-head">
     <span class="step-no">Stage 1.1 <span class="t">· target docking setup · 5 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Find the spot on MD2 worth covering</h2>
-    <p class="lede">This is the real MD2 receptor, residues <b class="num">A17–A160</b>. Drag to spin it. Two residues — <b class="num">A82</b> and <b class="num">A85</b> — are the contact hotspots. Click both to lock them as your design target.</p>
+    <p class="lede">This is the real MD2 co-receptor, residues <b class="num">A17–A160</b>. Drag to spin it. Two residues — <b class="num">A82</b> and <b class="num">A85</b> — are the contact hotspots. Click both to lock them as your design target.</p>
     <button class="ghost hint-btn" data-hint="1">Hint</button>
   </header>
   <div class="step-body">
     <div class="split wide">
       <div class="viewer canvas-box" style="height:min(430px,58vh)">
-        <canvas id="targetCanvas" aria-label="Rotatable 3D model of the MD2 receptor"></canvas>
+        <canvas id="targetCanvas" aria-label="Rotatable 3D model of the MD2 co-receptor"></canvas>
         <span class="canvas-hint">drag to rotate · click a red residue</span>
       </div>
       <div class="step-body">
@@ -1208,7 +1208,7 @@ document.addEventListener("visibilitychange", () => {
 });
 
 /* ============================================================
-   5 · MD2 receptor model
+   5 · MD2 co-receptor model
    ============================================================ */
 function buildMD2() {
   const rand = mulberry32(8817);
@@ -1552,10 +1552,10 @@ Steps[0] = {
       P.forEach(p => { ctx.fillStyle = C.acc; ctx.beginPath(); ctx.arc(p.x, p.y, 3.6 * p.s, 0, 6.283); ctx.fill(); });
       ctx.globalAlpha = 1;
       const caps = [
-        "MD2 receptor · searching for a binding surface",
-        "MD2 receptor · hotspot A82 / A85 identified",
-        "MD2 receptor · designed binder arriving",
-        "MD2 receptor · binder locked on the hotspots"
+        "MD2 co-receptor · searching for a binding surface",
+        "MD2 co-receptor · hotspot A82 / A85 identified",
+        "MD2 co-receptor · designed binder arriving",
+        "MD2 co-receptor · binder locked on the hotspots"
       ];
       const cap = $("#heroCap");
       const txt = caps[dockEase < .15 ? 0 : dockEase < .85 ? (Math.floor(t * .5) % 2 ? 1 : 2) : 3];
@@ -2390,8 +2390,8 @@ const QUIZ = [
   {
     q: "Your peptide is meant for a wound dressing. Which result would stop you from proceeding?",
     opts: [
-      { t: "A strong predicted MHC-II binder", ok: true, tag: "immune alarm",
-        ex: "A strong MHC-II hit means T-cells will likely recognise the peptide as foreign. On a wound dressing, that could trigger inflammation instead of healing it — the opposite of what we want." },
+      { t: "A strong predicted MHC-I binder", ok: true, tag: "immune alarm",
+        ex: "A strong MHC-I hit means T-cells will likely recognise the peptide as foreign. On a wound dressing, that could trigger inflammation instead of healing it — the opposite of what we want." },
       { t: "A pLDDT of 94", ok: false, tag: "excellent fold",
         ex: "94 is very high confidence. The model is saying the predicted structure is almost certainly correct. This is what you hope to see." },
       { t: "A ΔG of −8.4 kcal/mol", ok: false, tag: "strong binding",
