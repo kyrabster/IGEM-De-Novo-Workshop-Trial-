@@ -427,9 +427,9 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
 <section class="mission" id="mission" data-step="0">
   <div class="m-top">
     <span class="eyebrow">HKU iGEM · De novo design studio</span>
-    <h1 class="m-title">Design a <em>better</em> protein to switch off inflammation.</h1>
-    <p class="m-lede">A chronic wound keeps triggering an immune alarm. The alarm travels through a co-receptor called <b>MD2</b>.</p>
-    <p class="m-lede">A peptide called <b>TAP2 (TLR4 Antagonistic Peptide 2)</b> already blocks MD2 and helps wounds heal — but it is short-lived, moderately strong, and can provoke an immune response. Our job is not to invent from nothing: it is to <b>design a better TAP2</b> using generative AI, then run it through the same filters a real drug candidate faces.</p>
+    <h1 class="m-title">Design a <em>better</em> protein to switch off chronic inflammation.</h1>
+    <p class="m-lede">Bacterial infections releases signals to chronic wounds that trigger an immune alarm. The signal travels through a co-receptor called <b>MD2 (Myeloid Differentiation Protein 2)</b>.</p>
+    <p class="m-lede">A peptide called <b>TAP2 (TLR4 Antagonistic Peptide 2)</b> already blocks MD2 and helps wounds heal — but it is short-lived, moderately strong, and can provoke an immune response. HKU iGEM 2026 aims to <b>design a better TAP2</b> using generative AI, then run it through the same filters a real drug candidate faces. In the following workshop, we will teach you how to do just that.</p>
     <div class="m-meta">
       <span><b>15 stages</b> · about 50 minutes</span>
       <span><b>No coding</b> needed</span>
@@ -661,7 +661,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   <header class="step-head">
     <span class="step-no">Stage 2.3 <span class="t">· off-target safety (MMseqs2) · 5 min</span> <span class="step-done-pill">Done</span></span>
     <h2>Could it grab the wrong protein?</h2>
-    <p class="lede">MMseqs2 compares every candidate against the entire human proteome. If a design looks like a piece of a real human protein, it might bind somewhere we never intended. <b>Discard any candidate with one or more off-target hits.</b></p>
+    <p class="lede">MMseqs2 compares every candidate against the entire human proteome. If a design looks like a piece of a real human protein, it becomes a proxy indicator for cross-reactivity and ADA (Anti-Drug Antibody) risk. <b>Discard any candidate with one or more off-target hits.</b></p>
     <button class="ghost hint-btn" data-hint="5">Hint</button>
   </header>
   <div class="step-body">
@@ -764,7 +764,7 @@ input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;bac
   </header>
   <div class="step-body">
     <div class="canvas-box" style="height:280px"><canvas id="mdChart" aria-label="RMSD over 20 nanoseconds for both lead candidates"></canvas></div>
-    <div class="row"><button class="btn acc" id="mdRun">Run 20 ns simulation ▸</button><span class="kbd-hint" id="mdClock">0.0 ns</span></div>
+    <div class="row"><button class="btn acc" id="mdRun">Run 10 ns simulation ▸</button><span class="kbd-hint" id="mdClock">0.0 ns</span></div>
     <div class="split">
       <div class="panel" id="mdCardA" style="display:grid;gap:8px">
         <div class="row" style="justify-content:space-between"><b class="num">MD2B-01</b><span class="num" id="mdRmsdA">—</span></div>
